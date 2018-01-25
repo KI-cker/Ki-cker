@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+python tools/set_coordinate.py top_left_corner
+python tools/set_coordinate.py top_right_corner
+python tools/set_coordinate.py bottom_left_corner
+python tools/set_coordinate.py bottom_right_corner
+
+python tools/set_coordinate.py goal_left
+python tools/set_coordinate.py goal_right
+python tools/set_coordinate.py defense_left
+python tools/set_coordinate.py defense_right
+python tools/set_coordinate.py center_left
+python tools/set_coordinate.py center_right
+python tools/set_coordinate.py offense_left
+python tools/set_coordinate.py offense_right
+
+
+cat config.yml
+
