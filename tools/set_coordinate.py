@@ -13,7 +13,7 @@ def load_frame():
     return frames[0]
 
 def get_frame_camera():
-    cap = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture(1)
     r, f = cap.read()
     return f
 

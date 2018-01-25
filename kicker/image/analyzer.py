@@ -5,7 +5,6 @@ class Analyzer():
     def __init__(self, config):
         self.config = config
         self.coords = self.config['coordinates']
-        self.thresholds = self.config['thresholds']
         self.positions = ['goal', 'defense', 'center', 'offense']
         self.ball_template = np.array([
                [   0,   0,   0,   0,   0, 255,   0, 255,   0,   0,   0,   0,   0,   0,   0],
@@ -50,7 +49,7 @@ class Analyzer():
     def _can_move(self, frame, position, direction):
         p = position + '_' + direction
         # print((p, frame[self.coords[p][1], self.coords[p][0]]))
-        return np.max(frame[self.coords[p][1], self.coords[p][0]]) > self.thresholds[p]
+	return True
 
     def get_possible_moves(self, frame):
         return {p: [self._can_move(frame, p, 'left'), self._can_move(frame, p, 'right')] for p in self.positions}

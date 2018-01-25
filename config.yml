@@ -1,0 +1,12 @@
+coordinates:
+  bottom_left_corner: [628, 72]
+  bottom_right_corner: [622, 423]
+  center_left: [324, 259]
+  center_right: [134, 365]
+  defense_left: [487, 405]
+  goal_left: [566, 394]
+  goal_right: [564, 94]
+  offense_left: [312, 317]
+  offense_right: [481, 314]
+  top_left_corner: [0, 65]
+  top_right_corner: [3, 419]
