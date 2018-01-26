@@ -98,7 +98,7 @@ class Application(object):
                     self.storage_queue.put((f, self.inputs))
 
                 logging.debug("start updating window")
-                pygame.surfarray.blit_array(self.screen, np.swapaxes(img[::, ::-1, :], 0, 1))
+                pygame.surfarray.blit_array(self.screen, np.swapaxes(img[::-1, ::-1, ::-1], 0, 1))
                 # pygame.surfarray.blit_array(self.screen, img)
                 pygame.display.update()
                 # logging.debug("start processing events")

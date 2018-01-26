@@ -210,7 +210,7 @@ class MotorController:
         Value2 = False
         self.writeBooleanValue(Node1, Namespace1, Value1)
         self.writeBooleanValue(Node2, Namespace2, Value2)
-        logging.debug("STOP jog of rotatory axis:", AxisNo)
+        # logging.debug("STOP jog of rotatory axis:", AxisNo)
 
     def positiveJog_Trans(self, AxisNo):
         Node = Axis[AxisNo - 1][1][1][0]
@@ -235,7 +235,7 @@ class MotorController:
         Value2 = False
         self.writeBooleanValue(Node1, Namespace1, Value1)
         self.writeBooleanValue(Node2, Namespace2, Value2)
-        logging.debug("STOP jog of translatory axis:", AxisNo)
+        # logging.debug("STOP jog of translatory axis:", AxisNo)
 
     def translation(self, axisno, direction):
         if direction == 0:
