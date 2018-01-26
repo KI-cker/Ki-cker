@@ -61,7 +61,7 @@ class Application(object):
         self.motor = MotorController()
         self.helper = Helper()
 
-        self.enable_storage = False # enable_storage
+        self.enable_storage = enable_storage
 
 
         if self.enable_storage:
@@ -81,7 +81,6 @@ class Application(object):
         while True:
             # logging.debug("Start event loop")
             if self.video.grab():
-		print('xxxxx')
                 r, f = self.video.retrieve()
 
                 # self.possible_moves = self.analyzer.get_possible_moves(f)
@@ -97,9 +96,6 @@ class Application(object):
 
                 if self.enable_storage:
                     self.storage_queue.put((f, self.inputs))
-
-		logging.info(np.max(img))
-
 
                 logging.debug("start updating window")
                 pygame.surfarray.blit_array(self.screen, np.swapaxes(img[::, ::-1, :], 0, 1))
@@ -130,5 +126,5 @@ if __name__ == '__main__':
     agent = RandomAgent()
     # agent = KeyboardAgent()
     # agent = NeuralNetAgent()
-    program = Application(agent)
+    program = Application(agent, enable_storage=False)
     program.run()

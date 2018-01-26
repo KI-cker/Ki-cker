@@ -8,7 +8,7 @@ class SubScriptionHandler(object):
         value = data.monitored_item.Value.Value.Value
         nodeid = data.subscription_data.node.nodeid.Identifier
         timestamp = data.monitored_item.Value.ServerTimestamp
-        print("nodeid: ", nodeid, ";value:",value,";timestamp:",timestamp)
+        # print("nodeid: ", nodeid, ";value:",value,";timestamp:",timestamp)
         #print("Subscription",node, val, dir(data.subscription_data.node.nodeid))
         ###Implement your target-method here!####
 #end handler for subscriptions
@@ -132,7 +132,7 @@ class MotorController:
         self.client.connect()
         root = self.client.get_root_node()
         if (root != ""):
-            print("Connection established")
+            # print("Connection established")
             ack_axis1 = self.readValue_polling(PosMode_Ack_Rot_Tor[0], PosMode_Ack_Rot_Tor[1])
             ack_axis2 = self.readValue_polling(PosMode_Ack_Rot_Verteidiung[0], PosMode_Ack_Rot_Verteidiung[1])
             ack_axis3 = self.readValue_polling(PosMode_Ack_Rot_Mittelfeld[0], PosMode_Ack_Rot_Mittelfeld[1])
@@ -143,13 +143,13 @@ class MotorController:
             ack_axis8 = self.readValue_polling(PosMode_Ack_Trans_Sturm[0], PosMode_Ack_Trans_Sturm[1])
             initDone = ack_axis1 and ack_axis2 and ack_axis3 and ack_axis4 and ack_axis5 and ack_axis6 and ack_axis7 and ack_axis8
 
-            if (initDone != True):
-                print("axis not ready yet or error")
+            # if (initDone != True):
+             #    print("axis not ready yet or error")
 
-            if (initDone == True):
-                print("axis ready")
-        else:
-            print("Could not connect to server!")
+            # if (initDone == True):
+            #     print("axis ready")
+        # else:
+        #     print("Could not connect to server!")
 
     def readValue_polling(self, nodeId, namespace):
         var = self.client.get_node(ua.NodeId(nodeId, namespace))
@@ -188,14 +188,14 @@ class MotorController:
         Namespace = Axis[AxisNo - 1][0][1][1]
         Value = True
         self.writeBooleanValue(Node, Namespace, Value)
-        print("POSITIVE jog of rotatory axis:", AxisNo, ",NodeID: ns=", Namespace, ";i=", Node, ", Value:", Value)
+        # print("POSITIVE jog of rotatory axis:", AxisNo, ",NodeID: ns=", Namespace, ";i=", Node, ", Value:", Value)
 
     def negativeJog_Rot(self, AxisNo):
         Node = Axis[AxisNo - 1][0][0][0]
         Namespace = Axis[AxisNo - 1][0][0][1]
         Value = True
         self.writeBooleanValue(Node, Namespace, Value)
-        print("NEGATIVE jog of rotatory axis:", AxisNo, ",NodeID: ns=", Namespace, ";i=", Node, ", Value:", Value)
+        # print("NEGATIVE jog of rotatory axis:", AxisNo, ",NodeID: ns=", Namespace, ";i=", Node, ", Value:", Value)
 
     def stopJog_Rot(self, AxisNo):
         Node1 = Axis[AxisNo - 1][0][0][0]
@@ -206,21 +206,21 @@ class MotorController:
         Value2 = False
         self.writeBooleanValue(Node1, Namespace1, Value1)
         self.writeBooleanValue(Node2, Namespace2, Value2)
-        print("STOP jog of rotatory axis:", AxisNo)
+        # print("STOP jog of rotatory axis:", AxisNo)
 
     def positiveJog_Trans(self, AxisNo):
         Node = Axis[AxisNo - 1][1][1][0]
         Namespace = Axis[AxisNo - 1][1][1][1]
         Value = True
         self.writeBooleanValue(Node, Namespace, Value)
-        print("POSITIVE jog of translatory axis:", AxisNo, ",NodeID: ns=", Namespace, ";i=", Node, ", Value:", Value)
+        # print("POSITIVE jog of translatory axis:", AxisNo, ",NodeID: ns=", Namespace, ";i=", Node, ", Value:", Value)
 
     def negativeJog_Trans(self, AxisNo):
         Node = Axis[AxisNo - 1][1][0][0]
         Namespace = Axis[AxisNo - 1][1][0][1]
         Value = True
         self.writeBooleanValue(Node, Namespace, Value)
-        print("NEGATIVE jog of translatory axis:", AxisNo, ",NodeID: ns=", Namespace, ";i=", Node, ", Value:", Value)
+        # print("NEGATIVE jog of translatory axis:", AxisNo, ",NodeID: ns=", Namespace, ";i=", Node, ", Value:", Value)
 
     def stopJog_Trans(self, AxisNo):
         Node1 = Axis[AxisNo - 1][1][0][0]
@@ -231,7 +231,7 @@ class MotorController:
         Value2 = False
         self.writeBooleanValue(Node1, Namespace1, Value1)
         self.writeBooleanValue(Node2, Namespace2, Value2)
-        print("STOP jog of translatory axis:", AxisNo)
+        # print("STOP jog of translatory axis:", AxisNo)
 
     def translation(self, axisno, direction):
         if direction == 0:
@@ -263,7 +263,7 @@ class MotorController:
         diffAction = self.getDiffToLastAction(action)
         self.last_action = action[:]
 
-        # print action
+        # # print action
         # Sturm
         if diffAction[6] != self.NO_ACTION:
             self.rotation(4, action[6])

@@ -15,6 +15,7 @@ def build_net(input_shape, num_outputs):
     model.add(Conv2D(64, (3, 3), padding='same', strides=(2, 2), activation='relu'))
     model.add(Flatten())
     model.add(Dense(512, activation='relu'))
+    model.add(Dense(24, activation='relu'))
 
     model.compile(loss='mse', optimizer='adamax')
 

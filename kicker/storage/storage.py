@@ -17,10 +17,10 @@ class Storage():
     def add_frame(self, frame):
         if self.frames is None:
             self.shape = (1, ) + frame.shape
-            self.frames = [cv2.imencode('.jpg', frame)[1]]
+            self.frames = [cv2.imencode('.jpg', frame)[1].tostring()]
             # self.frames = frame.reshape(self.shape)
         else:
-            self.frames.append(cv2.imencode('.jpg', frame)[1])
+            self.frames.append(cv2.imencode('.jpg', frame)[1].tostring())
             # self.frames = np.concatenate((self.frames, frame.reshape(self.shape)), axis=0)
         
     def add_action(self, action):
