@@ -192,14 +192,14 @@ class MotorController:
         Namespace = Axis[AxisNo - 1][0][1][1]
         Value = True
         self.writeBooleanValue(Node, Namespace, Value)
-        logging.debug("POSITIVE jog of rotatory axis:", AxisNo, ",NodeID: ns=", Namespace, ";i=", Node, ", Value:", Value)
+        # logging.debug("POSITIVE jog of rotatory axis:", AxisNo, ",NodeID: ns=", Namespace, ";i=", Node, ", Value:", Value)
 
     def negativeJog_Rot(self, AxisNo):
         Node = Axis[AxisNo - 1][0][0][0]
         Namespace = Axis[AxisNo - 1][0][0][1]
         Value = True
         self.writeBooleanValue(Node, Namespace, Value)
-        logging.debug("NEGATIVE jog of rotatory axis:", AxisNo, ",NodeID: ns=", Namespace, ";i=", Node, ", Value:", Value)
+        # logging.debug("NEGATIVE jog of rotatory axis:", AxisNo, ",NodeID: ns=", Namespace, ";i=", Node, ", Value:", Value)
 
     def stopJog_Rot(self, AxisNo):
         Node1 = Axis[AxisNo - 1][0][0][0]
@@ -217,14 +217,14 @@ class MotorController:
         Namespace = Axis[AxisNo - 1][1][1][1]
         Value = True
         self.writeBooleanValue(Node, Namespace, Value)
-        logging.debug("POSITIVE jog of translatory axis:", AxisNo, ",NodeID: ns=", Namespace, ";i=", Node, ", Value:", Value)
+        # logging.debug("POSITIVE jog of translatory axis:", AxisNo, ",NodeID: ns=", Namespace, ";i=", Node, ", Value:", Value)
 
     def negativeJog_Trans(self, AxisNo):
         Node = Axis[AxisNo - 1][1][0][0]
         Namespace = Axis[AxisNo - 1][1][0][1]
         Value = True
         self.writeBooleanValue(Node, Namespace, Value)
-        logging.debug("NEGATIVE jog of translatory axis:", AxisNo, ",NodeID: ns=", Namespace, ";i=", Node, ", Value:", Value)
+        # logging.debug("NEGATIVE jog of translatory axis:", AxisNo, ",NodeID: ns=", Namespace, ";i=", Node, ", Value:", Value)
 
     def stopJog_Trans(self, AxisNo):
         Node1 = Axis[AxisNo - 1][1][0][0]
