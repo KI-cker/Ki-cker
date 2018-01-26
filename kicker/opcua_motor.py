@@ -3,7 +3,7 @@ from opcua import Client
 from opcua import ua
 import logging
 
-logging.basicConfig(filename='opcua.log', level=logging.DEBUG, format='%(asctime)s %(filename)s %(lineno)d %(levelname)s %(message)s')
+logging.basicConfig(filename='opcua.log', level=logging.ERROR, format='%(asctime)s %(filename)s %(lineno)d %(levelname)s %(message)s')
 
 
 #handler for subscriptions
