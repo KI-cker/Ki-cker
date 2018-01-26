@@ -88,9 +88,9 @@ class Application(object):
                 # img, c_x, c_y = add_ball(f[:])
                 img = f[:]
                 # img = self.analyzer.add_circles_to_limiters(img[:, :, ::-1])
-                # img = self.analyzer.extract_table(img, (self.screen_width, self.screen_height))
+                img = self.analyzer.extract_table(img, (self.screen_width, self.screen_height))
 
-                img = cv2.resize(img, (self.screen_width, self.screen_height))
+                # img = cv2.resize(img, (self.screen_width, self.screen_height))
 
                 self.agent.new_frame(f)
 
@@ -110,6 +110,7 @@ class Application(object):
                         self.storage_queue.put((None, None))
                         self.storage_process.join()
 
+		    self.motor.disconnect()
                     pygame.quit()
                     sys.exit()
 
