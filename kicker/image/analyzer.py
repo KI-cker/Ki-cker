@@ -49,7 +49,7 @@ class Analyzer():
     def _can_move(self, frame, position, direction):
         p = position + '_' + direction
         # print((p, frame[self.coords[p][1], self.coords[p][0]]))
-	return True
+        return True
 
     def get_possible_moves(self, frame):
         return {p: [self._can_move(frame, p, 'left'), self._can_move(frame, p, 'right')] for p in self.positions}

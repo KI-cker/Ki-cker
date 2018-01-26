@@ -8,13 +8,15 @@ from kicker.image import Analyzer
 from kicker.neural_net import NeuralNet
 
 class NeuralNetAgent(Agent):
-    def __init__(self):
+    def __init__(self, randomness=0.5):
         Agent.__init__(self)
         self.config = self.read_config()
         self.analyzer = Analyzer(self.config)
         self.last_frame = None
 
         self.shape = (320, 480,  2)
+
+        self.randomness = randomness
 
         self.neural_net = NeuralNet(24, self.shape)
 
@@ -34,7 +36,7 @@ class NeuralNetAgent(Agent):
         res = self.neural_net.predict_single(np.concatenate((self.last_frame, first_frame), axis=2))
         self.inputs = convert_neural_net_result_to_actions(res)
 
-        if random.random() < 0.5:
+        if random.random() < self.randomness:
             self.inputs = [random.randint(0, 2) - 1 for k in range(0, 8)]
 
         self.inputs_changed = True
