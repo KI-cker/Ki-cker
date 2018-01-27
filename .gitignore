@@ -2,4 +2,6 @@
 *.log
 *.h5
 *.swp
+.idea
+.ipynb_checkpoints
 
