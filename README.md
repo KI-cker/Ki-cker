@@ -14,3 +14,8 @@ Filter out the good games. This scripts weeds out games, where here are few dist
 ```
 python tools/filter_good_games.py
 ```
+Then one can proceed to score the game with
+```
+python tools/score_training_data.py
+```
+This process produces then a file `train/training_data.h5` which contains the necessary information to train a neural net.
