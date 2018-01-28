@@ -1,3 +1,4 @@
+import numpy as np
 import cv2
 
 from kicker.image import Analyzer
@@ -5,7 +6,7 @@ from kicker.image import Analyzer
 
 
 class Converter:
-    def __init__(self, parser, game, shape=(480, 320)):
+    def __init__(self, parser, game, shape=(320, 480)):
         self.parser = parser
         self.game = game
         self.shape = shape
@@ -14,7 +15,8 @@ class Converter:
 
     def get_table_frame(self, index):
         frame = self.parser.get_frame(self.game, index)
-        return self.analyzer.extract_table(frame, self.shape)
+        extracted = self.analyzer.extract_table(frame, self.shape)
+        return np.swapaxes(extracted, 0, 1)
 
     def get_table_frames(self):
         number = self.parser.get_number_of_frames(self.game)
