@@ -19,3 +19,24 @@ Then one can proceed to score the game with
 python tools/score_training_data.py
 ```
 This process produces then a file `train/training_data.h5` which contains the necessary information to train a neural net.
+
+## Training
+
+Training is still being implemented. In a python shell it can be achieved via
+```
+from kicker.train import DataProvider
+d = DataProvider()
+
+from kicker.train import Trainer
+from kicker import NeuralNet
+nn = NeuralNet(24, (320, 480, 2))
+
+t = Trainer(nn)
+
+for _ in range(100):
+    s = d.get_batch()
+    print(t.train_step(s)[1])
+    
+nn.save()
+```
+This updates `model.h5` with 100 training iterations.
