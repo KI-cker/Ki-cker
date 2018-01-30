@@ -35,7 +35,7 @@ class Trainer:
 
         train_step = tf.train.AdamOptimizer(1e-6).minimize(loss)
 
-        return train_step, loss
+        return train_step, loss, q_new - q_old
 
     def train_step(self, batch):
         sess = K.get_session()
