@@ -22,7 +22,7 @@ python tools/filter_good_games.py -i $INPUT_FILE -o OUTPUT_FILE
 ```
 Then one can proceed to score the game with
 ```
-python tools/score_training_data.py
+python tools/score_training_data.py -i $INPUT_FILE
 ```
 This process produces then a file `train/training_data.h5` which contains the necessary information to train a neural net.
 

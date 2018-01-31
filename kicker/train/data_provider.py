@@ -4,8 +4,8 @@ import random
 import numpy as np
 
 class DataProvider:
-    def __init__(self):
-        self.file = h5py.File('train/training_data.h5', 'r')
+    def __init__(self, filename='train/training_data.h5'):
+        self.file = h5py.File(filename, 'r')
         self.games = [g for g in self.file if 'scores' in self.file[g]]
         self.shape = (320, 480)
 
