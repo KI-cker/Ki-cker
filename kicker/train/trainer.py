@@ -29,13 +29,13 @@ class Trainer:
 
 
         second_term = self.gamma * tf.reduce_max(computed_next, axis=2)
-        q_new = rewards + second_term
+        q_new = tf.stop_gradient(rewards + second_term)
 
         loss = tf.losses.huber_loss(q_new, q_old)
 
         train_step = tf.train.AdamOptimizer(1e-6).minimize(loss)
 
-        return train_step, loss, q_new - q_old
+        return train_step, loss, tf.reduce_mean(tf.abs(q_new - q_old))
 
     def train_step(self, batch):
         sess = K.get_session()

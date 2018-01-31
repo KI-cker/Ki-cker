@@ -1,3 +1,6 @@
+import numpy as np
+from datetime import datetime
+
 from kicker.train import DataProvider
 d = DataProvider()
 s = d.get_batch()
@@ -11,6 +14,6 @@ t = Trainer(nn)
 for j in range(1000):
     s = d.get_batch()
     _, loss, diff = t.train_step(s)
-    print(j, 'Loss ', loss, ' diff ', np.mean(np.max(diff, axis=1)))
+    print(datetime.utcnow(), j, 'Loss ', loss, ' diff ', diff)
 
 nn.save()
