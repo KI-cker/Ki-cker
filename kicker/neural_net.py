@@ -22,16 +22,17 @@ def build_net(input_shape, num_outputs):
     return model
 
 class NeuralNet():
-    def __init__(self, num_output, input_shape):
+    def __init__(self, num_output, input_shape, filename='model.h5'):
         self.num_output = num_output
         self.input_shape = input_shape
-        if os.path.isfile('model.h5'):
-            self.model = load_model('model.h5')
+        self.filename = filename
+        if os.path.isfile(self.filename):
+            self.model = load_model(self.filename)
         else:
             self.model = build_net(input_shape, num_output)
 
     def save(self):
-        self.model.save('model.h5')
+        self.model.save(self.filename)
 
     def predict(self, frames):
         prediction = self.model.predict(frames)
