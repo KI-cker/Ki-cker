@@ -33,3 +33,9 @@ Training can be  corun for 1000 steps via the
 python tools/train_1000.py
 ```
 This updates `model.h5` with 1000 training iterations.
+
+Running
+```
+python tools/analyze_model.py model.h5
+```
+generates graphs displaying the distribution of the weights. These should approach smooth curvers during training.
