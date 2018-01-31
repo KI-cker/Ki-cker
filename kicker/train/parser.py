@@ -30,5 +30,6 @@ class Parser:
         table_frames = [self.decode_image(i) for i in data['table_frames_encoded']]
         positions = [p for p in data['ball_pos']]
         actions = [a for a in data['actions']]
+        scores = [s for s in data['ball_scores']]
 
-        return table_frames, positions, actions
+        return table_frames, positions, actions, scores

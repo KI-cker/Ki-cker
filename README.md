@@ -1,4 +1,10 @@
 # KI:cker
+## Preparation
+
+Add the current directory to the search path via
+```
+export PYTHONPATH=$(pwd)
+``` 
 
 ## Preprocessing for training
 
@@ -12,7 +18,7 @@ python tools/neural_net_detection.py -f tools/frozen_inference_graph.pb -i train
 ```
 Filter out the good games. This scripts weeds out games, where here are few distinct ball positions detected.
 ```
-python tools/filter_good_games.py
+python tools/filter_good_games.py -i $INPUT_FILE -o OUTPUT_FILE
 ```
 Then one can proceed to score the game with
 ```
