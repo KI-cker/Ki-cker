@@ -16,13 +16,14 @@ class DataProvider:
         game_name = random.choice(self.games)
         game = self.file[game_name]
 
-        length = len(game['scores']) - 2
+        length = len(game['scores']) - 5
 
         index = random.randint(0, length)
 
         return {
-            'observation': self.build_input(game, index),
-            'observation_next': self.build_input(game, index + 1),
+            'observations': [game['table_frames_encoded'][index + j] for j in range(3)],
+            # 'observation': self.build_input(game, index),
+            # 'observation_next': self.build_input(game, index + 1),
             'score': game['scores'][index],
             'action': [a + 1 for a in game['actions'][index]]
         }

@@ -13,12 +13,26 @@ class Trainer:
 
         self.tf_train_step = self.build_train_step()
 
+        # writer = tf.summary.FileWriter(logdir='logs', graph=K.get_session.get_graph())
+        # writer.flush()
+
     def build_train_step(self):
-        inputs = tf.placeholder(tf.float32, shape=[None, self.height, self.width, 2], name='inputs')
-        inputs_next = tf.placeholder(tf.float32, shape=[None, self.height, self.width, 2], name='inputs_next')
+        observations = tf.placeholder(tf.string, shape=[None, 3], name='observations')
+        # inputs = tf.placeholder(tf.float32, shape=[None, self.height, self.width, 2], name='inputs')
+        # inputs_next = tf.placeholder(tf.float32, shape=[None, self.height, self.width, 2], name='inputs_next')
 
         rewards = tf.placeholder(tf.float32, shape=[None, 8], name='rewards')
         actions = tf.placeholder(tf.uint8, shape=[None, 8], name='actions')
+
+        observations_img = tf.cast(tf.map_fn(lambda i: self.convert_images(i), observations, dtype=tf.uint8), tf.float32)
+        observations_img.set_shape([None, self.width, self.height, 3])
+
+        inputs = observations_img[:,:,:,0:2]
+        inputs_next = observations_img[:,:,:,1:3]
+
+        inputs.set_shape([None, self.width, self.height, 2])
+        inputs_next.set_shape([None, self.width, self.height, 2])
+
 
         computed = self.evaluate_input(inputs)
         computed_next = self.evaluate_input(inputs_next)
@@ -37,6 +51,10 @@ class Trainer:
 
         return train_step, loss, tf.reduce_mean(tf.abs(q_new - q_old))
 
+    def convert_images(self, inputs):
+        return tf.transpose(tf.map_fn(lambda i: tf.image.decode_jpeg(i), inputs, dtype=tf.uint8)[:,:,:,0], [1,2,0])
+
+
     def train_step(self, batch):
         sess = K.get_session()
 
@@ -49,6 +67,7 @@ class Trainer:
         return {
             'rewards:0': [[s['score'],] * 8 for s in batch],
             'actions:0': [s['action'] for s in batch],
-            'inputs:0': [s['observation'] for s in batch],
-            'inputs_next:0': [s['observation_next'] for s in batch]
+            'observations:0': [s['observations'] for s in batch]
+            # 'inputs:0': [s['observation'] for s in batch],
+            # 'inputs_next:0': [s['observation_next'] for s in batch]
         }
