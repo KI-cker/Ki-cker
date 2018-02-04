@@ -4,10 +4,11 @@ import random
 import numpy as np
 
 class DataProvider:
-    def __init__(self, filename='train/training_data.h5'):
+    def __init__(self, filename='train/training_data.h5', return_observations=False):
         self.file = h5py.File(filename, 'r')
         self.games = [g for g in self.file if 'scores' in self.file[g]]
         self.shape = (320, 480)
+        self.return_observations = return_observations
 
     def get_batch(self, sample=32):
         return [self.get_single() for _ in range(sample)]
@@ -20,13 +21,17 @@ class DataProvider:
 
         index = random.randint(0, length)
 
-        return {
+        result = {
             'observations': [game['table_frames_encoded'][index + j] for j in range(3)],
-            # 'observation': self.build_input(game, index),
-            # 'observation_next': self.build_input(game, index + 1),
             'score': game['scores'][index],
             'action': [a + 1 for a in game['actions'][index]]
         }
+
+        if self.return_observations:
+            result['observation'] = self.build_input(game, index)
+            result['observation_next'] = self.build_input(game, index + 1)
+
+        return result
 
     def build_input(self, game, index):
         current = self.decode(game['table_frames_encoded'][index])
