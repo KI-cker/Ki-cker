@@ -39,3 +39,14 @@ Running
 python tools/analyze_model.py model.h5
 ```
 generates graphs displaying the distribution of the weights. These should approach smooth curvers during training.
+
+## Visualisation
+With
+```
+python tools/inspect_data.py
+```
+one can visualize what the neural net sees. One sees the three subsequent frames from the collected data set, and the actions that the neural net would perform in the form
+```
+[gr, gl, dr, dl, cr, cl, ar, al]
+```
+where g = goal, d = defense, c = center, a = attack and r = rotation, l = lateral. 0 corresponds to no movement, 1 to forward, -1 to backward.
