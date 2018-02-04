@@ -18,6 +18,7 @@ outer = gridspec.GridSpec(2, 1)
 titles = ['Goal Radial', 'Goal Lateral', 'Defense Radial', 'Defense Lateral', 'Center Radial', 'Center Lateral', 'Attack Radial', 'Attack Lateral']
 
 def show_prediction(entry):
+    fig.clf()
     inner = gridspec.GridSpecFromSubplotSpec(1, 3, subplot_spec=outer[0])
     axes = [pyplot.Subplot(fig, inner[j]) for j in range(3)]
     prediction = nn.predict_single(entry['observation']).reshape(8, 3)

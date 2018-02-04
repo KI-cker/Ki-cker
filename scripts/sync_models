@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+rsync -av --progress kicker-data:/home/ki-cker/data/models/ models/
