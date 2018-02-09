@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+rsync -v --progress games/ kicker-data:/home/ki-cker/data/games
