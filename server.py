@@ -4,6 +4,7 @@ import cv2
 import tensorflow as tf
 import keras.backend.tensorflow_backend as KTF
 import yaml
+import time
 
 from kicker.agents.neural_net_agent import NeuralNetAgent
 from kicker.opcua_motor import MotorController
@@ -33,7 +34,7 @@ def worker(queue, name, model, randomness):
         yaml_config = yaml.load(f)
 
     storage_queue = Queue()
-    storage_process = Process(target=storage_worker, args=(storage_queue, yaml_config))
+    storage_process = Process(target=storage_worker, args=(storage_queue, yaml_config, 'games/{}_{}.h5'.format(name, time.strftime('%Y%m%d_%H%M%S'))))
     storage_process.start()
 
     j = 0
