@@ -15,7 +15,9 @@ from multiprocessing import Process, Queue
 from time import sleep
 
 import logging
-logging.basicConfig(filename='example.log',level=logging.DEBUG)
+
+logging.basicConfig(filename='kicker.log', level=logging.DEBUG, format='%(asctime)s %(filename)s %(lineno)d %(levelname)s %(message)s')
+logging.info("Fussball ist wie Schach nur ohne Wuerfel")
 
 from glob import glob
 
@@ -25,10 +27,18 @@ def worker(queue, name, model, randomness):
     sess = tf.Session(config=config)
     KTF.set_session(sess)
 
+    logging.info('started session')
+
     agent = NeuralNetAgent(randomness=randomness, neural_net_filename=model)
+
+    logging.info('started neural net')
     motor = MotorController()
 
+    logging.info('started motor')
+
     video = cv2.VideoCapture(1)
+
+    logging.info('started video')
 
     with open('config.yml', 'r') as f:
         yaml_config = yaml.load(f)
@@ -37,15 +47,23 @@ def worker(queue, name, model, randomness):
     storage_process = Process(target=storage_worker, args=(storage_queue, yaml_config, 'games/{}_{}.h5'.format(name, time.strftime('%Y%m%d_%H%M%S'))))
     storage_process.start()
 
-    j = 0
+    logging.info('started queue')
+
+    inputs = [0,] * 8
+
     while queue.empty():
+        logging.info('loop')
         if video.grab():
+            logging.info('video grab')
+
             r, f = video.retrieve()
 
             agent.new_frame(f)
-            inputs = agent.get_inputs()
+            temp_inputs = agent.get_inputs()
 
-            motor.control(inputs)
+            if temp_inputs is not None:
+                inputs = temp_inputs
+                motor.control(inputs)
 
             storage_queue.put((f, inputs))
 
@@ -68,6 +86,7 @@ def index():
     if not process:
         models = glob('models/*.h5')
         models.sort()
+        models.reverse()
         return render_template('start.html', models=models)
     else:
         return render_template('stop.html')
