@@ -1,0 +1,39 @@
+<html>
+    <head>
+<style>
+h1 {
+    text-align: center;
+}
+label, input {
+    display: inline-block;
+    margin: 20px;
+}
+label {
+    width: 20%;
+}
+input {
+    width: 30%;
+}
+
+</style>
+
+    </head>
+    <body>
+        <form method="POST" action="start">
+        <h1>New game</h1>
+
+        <label for="name">Name</label>
+        <input id="name" name="name" type="text"/><br/>
+        <label for="model">Model</label>
+        <select name="model" id="model">
+            {% for model in models %}
+            <option value="model">{{ model }}</option>
+            {% endfor %}
+        </select><br/>
+        <label for="randomness">Randomness</label>
+        <input id="randomness" name="randomness" type="range"/><br/>
+        <label></label>
+        <input type="submit" value="Start">
+        </form>
+    </body>
+</html>
