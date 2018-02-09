@@ -113,7 +113,7 @@ class Application(object):
                         self.storage_queue.put((None, None))
                         self.storage_process.join()
 
-		    self.motor.disconnect()
+                    self.motor.disconnect()
                     pygame.quit()
                     sys.exit()
 
