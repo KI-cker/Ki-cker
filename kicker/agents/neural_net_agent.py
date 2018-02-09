@@ -8,7 +8,7 @@ from kicker.image import Analyzer
 from kicker.neural_net import NeuralNet
 
 class NeuralNetAgent(Agent):
-    def __init__(self, randomness=0.5):
+    def __init__(self, randomness=0.5, neural_net_filename='model.h5'):
         Agent.__init__(self)
         self.config = self.read_config()
         self.analyzer = Analyzer(self.config)
@@ -18,7 +18,7 @@ class NeuralNetAgent(Agent):
 
         self.randomness = randomness
 
-        self.neural_net = NeuralNet(24, self.shape)
+        self.neural_net = NeuralNet(24, self.shape, filename=neural_net_filename)
 
     def read_config(self):
         with open('config.yml', 'r') as f:

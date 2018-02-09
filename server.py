@@ -1,5 +1,15 @@
 from flask import Flask, render_template, redirect, url_for, request
 
+import cv2
+import tensorflow as tf
+import keras.backend.tensorflow_backend as KTF
+import yaml
+
+from kicker.agents.neural_net_agent import NeuralNetAgent
+from kicker.opcua_motor import MotorController
+from kicker.storage import storage_worker
+
+
 from multiprocessing import Process, Queue
 from time import sleep
 
@@ -8,13 +18,41 @@ logging.basicConfig(filename='example.log',level=logging.DEBUG)
 
 from glob import glob
 
-def worker(queue):
+def worker(queue, name, model, randomness):
+    config = tf.ConfigProto()
+    config.gpu_options.allow_growth = True
+    sess = tf.Session(config=config)
+    KTF.set_session(sess)
+
+    agent = NeuralNetAgent(randomness=randomness, neural_net_filename=model)
+    motor = MotorController()
+
+    video = cv2.VideoCapture(1)
+
+    with open('config.yml', 'r') as f:
+        yaml_config = yaml.load(f)
+
+    storage_queue = Queue()
+    storage_process = Process(target=storage_worker, args=(storage_queue, yaml_config))
+    storage_process.start()
+
     j = 0
     while queue.empty():
-        logging.info('text {}'.format(j))
-        sleep(1)
-        j = j + 1
-    print(queue.get())
+        if video.grab():
+            r, f = video.retrieve()
+
+            agent.new_frame(f)
+            inputs = agent.get_inputs()
+
+            motor.control(inputs)
+
+            storage_queue.put((f, inputs))
+
+
+    queue.get()
+    storage_queue.put((None, None))
+    storage_process.join()
+    motor.disconnect()
 
 
 
@@ -54,8 +92,10 @@ def start():
 
     print('Starting. Name {}    Model {}    Randomness {}'.format(name, model, randomness))
 
-    process = Process(target=worker, args=(stop_queue,))
+    process = Process(target=worker, args=(stop_queue, name, model, randomness))
     process.start()
 
     return redirect(url_for('index'))
 
+if __name__ == '__main__':
+    app.run(debug=False, host='0.0.0.0')
