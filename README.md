@@ -10,7 +10,7 @@ export PYTHONPATH=$(pwd)
 
 Extract the table region via
 ```
-python tools/add_table_frames_to_h5py.py
+python tools/add_table_frames_to_h5py.py -i filename
 ```
 Add ball positions
 ```
