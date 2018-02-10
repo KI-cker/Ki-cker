@@ -17,12 +17,12 @@ class DataProvider:
         game_name = random.choice(self.games)
         game = self.file[game_name]
 
-        length = len(game['scores']) - 5
+        print(game['good_indices'])
 
-        index = random.randint(0, length)
+        index = random.choice(game['good_indices'])
 
         result = {
-            'observations': [game['table_frames_encoded'][index + j] for j in range(3)],
+            'observations': [game['table_frames_encoded'][index + j] for j in range(-1, 2)],
             'score': game['scores'][index],
             'action': [a + 1 for a in game['actions'][index]]
         }

@@ -5,7 +5,7 @@ import seaborn as sns
 from kicker.train import DataProvider
 from kicker import NeuralNet
 
-d = DataProvider(return_observations=True)
+d = DataProvider(return_observations=True, filename='train/training_data_new.h5')
 s = d.get_batch()
 
 nn = NeuralNet(23, (320, 480, 2))
