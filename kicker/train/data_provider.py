@@ -17,8 +17,6 @@ class DataProvider:
         game_name = random.choice(self.games)
         game = self.file[game_name]
 
-        print(game['good_indices'])
-
         index = random.choice(game['good_indices'])
 
         result = {
