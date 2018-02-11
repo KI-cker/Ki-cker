@@ -1,12 +1,17 @@
 import os
+import tensorflow as tf
 
 from keras.models import Sequential, load_model
 from keras.layers import Dense
-from keras.layers import Dropout
 from keras.layers import Flatten
 from keras.layers import Conv2D
-from keras.layers.convolutional import Convolution2D
-from keras import backend as K
+import keras.backend.tensorflow_backend as KTF
+
+config = tf.ConfigProto()
+config.gpu_options.allow_growth = True
+sess = tf.Session(config=config)
+KTF.set_session(sess)
+
 
 def build_net(input_shape, num_outputs):
     model = Sequential()
