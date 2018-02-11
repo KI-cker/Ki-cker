@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, request
+from flask import Flask, render_template, redirect, url_for, request, send_from_directory
 
 import cv2
 import tensorflow as tf
@@ -78,7 +78,7 @@ def worker(queue, name, model, randomness):
 process = None
 
 stop_queue = Queue()
-app = Flask('__name__')
+app = Flask('__name__', static_url_path='/assets', static_folder='templates/assets')
 
 @app.route('/')
 def index():

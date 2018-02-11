@@ -14,14 +14,23 @@ label {
 input {
     width: 30%;
 }
+img {
+    width: 100%;
+}
+
+div {
+    position: absolute;
+    bottom: 0;
+    width: 80%;
+    left: 10%;
+}
 
 </style>
 
     </head>
     <body>
-        <form method="POST" action="start">
         <h1>New game</h1>
-
+        <form method="POST" action="start">
         <label for="name">Name</label>
         <input id="name" name="name" type="text"/><br/>
         <label for="model">Model</label>
@@ -35,5 +44,10 @@ input {
         <label></label>
         <input type="submit" value="Start">
         </form>
+
+        <div>
+            <img src="assets/tng.png">
+            <img src="assets/rexroth.jpg">
+        </div>
     </body>
 </html>
