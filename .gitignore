@@ -4,4 +4,6 @@
 *.swp
 .idea
 .ipynb_checkpoints
+*.pb
+*.ipynb
 
