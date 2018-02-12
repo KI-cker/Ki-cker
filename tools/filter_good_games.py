@@ -10,7 +10,7 @@ from kicker.train import Parser
 def encode_frames(frames):
     return [cv2.imencode('.jpg', f)[1].tostring() for f in frames]
 
-def add_new_group_to_file(f, frames, positions, actions, good_indices):
+def add_new_group_to_file(f, frames, positions, actions, good_indices, goals_received):
     current_count = len(f)
     new_name = "game{}".format(current_count + 1)
 
@@ -21,6 +21,18 @@ def add_new_group_to_file(f, frames, positions, actions, good_indices):
     group['actions'] = actions
     group['ball_pos'] = positions
     group['good_indices'] = good_indices
+    group['goals_receieved'] = goals_received
+
+def detect_goals_received(positions,  scores):
+    goals_received = []
+    number = len(positions)
+
+    for j in range(number - 5):
+        if positions[j][0] > 420 and scores[j] > 0.9:
+            if np.sum(scores[j:j + 7] < 0.3) > 3:
+                goals_received.append(j)
+
+    return goals_received
 
 def process(p, f):
     for g in p.file:
@@ -30,8 +42,10 @@ def process(p, f):
         number = len(scores)
         good_indices = [index for index in range(1, number) if np.min(scores[index-1:index+2]) > 0.9]
 
+        goals_received = detect_goals_received(positions, scores)
+
         if len(good_indices) > 5:
-            add_new_group_to_file(f, frames, positions, actions, good_indices)
+            add_new_group_to_file(f, frames, positions, actions, good_indices, goals_received)
 
 def main():
     parser = argparse.ArgumentParser()
