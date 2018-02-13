@@ -23,6 +23,7 @@ class Trainer:
 
         rewards = tf.placeholder(tf.float32, shape=[None, 8], name='rewards')
         actions = tf.placeholder(tf.uint8, shape=[None, 8], name='actions')
+        terminals = tf.placeholder(tf.bool, shape=[None], name='terminal')
 
         observations_img = tf.cast(tf.map_fn(lambda i: self.convert_images(i), observations, dtype=tf.uint8), tf.float32)
         observations_img.set_shape([None, self.width, self.height, 3])
@@ -43,7 +44,7 @@ class Trainer:
 
 
         second_term = self.gamma * tf.reduce_max(computed_next, axis=2)
-        q_new = tf.stop_gradient(rewards + second_term)
+        q_new = tf.stop_gradient(rewards + tf.where(terminals, tf.zeros_like(second_term), second_term))
 
         loss = tf.losses.huber_loss(q_new, q_old)
 
@@ -67,7 +68,8 @@ class Trainer:
         return {
             'rewards:0': [[s['score'],] * 8 for s in batch],
             'actions:0': [s['action'] for s in batch],
-            'observations:0': [s['observations'] for s in batch]
+            'observations:0': [s['observations'] for s in batch],
+            'terminal:0': [s['terminal'] for s in batch]
             # 'inputs:0': [s['observation'] for s in batch],
             # 'inputs_next:0': [s['observation_next'] for s in batch]
         }

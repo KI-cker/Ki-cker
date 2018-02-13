@@ -21,7 +21,7 @@ def add_new_group_to_file(f, frames, positions, actions, good_indices, goals_rec
     group['actions'] = actions
     group['ball_pos'] = positions
     group['good_indices'] = good_indices
-    group['goals_receieved'] = goals_received
+    group['goals_received'] = goals_received
 
 def detect_goals_received(positions,  scores):
     goals_received = []

@@ -18,12 +18,17 @@ class DataProvider:
         game = self.file[game_name]
 
         index = random.choice(game['good_indices'])
+        received_goal = index in game['goals_received']
 
         result = {
             'observations': [game['table_frames_encoded'][index + j] for j in range(-1, 2)],
             'score': game['scores'][index],
-            'action': [a + 1 for a in game['actions'][index]]
+            'action': [a + 1 for a in game['actions'][index]],
+            'terminal': received_goal
         }
+
+        if received_goal:
+            result['score'] = -100
 
         if self.return_observations:
             result['observation'] = self.build_input(game, index)
