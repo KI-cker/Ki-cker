@@ -9,7 +9,6 @@ def add_table_frames(filename):
         print("Processing {}".format(g))
 
         if 'table_frames_encoded' not in p.file[g]:
-            del p.file[g]['table_frames_encoded']
             c = Converter(p, g)
             p.file[g]['table_frames_encoded'] = c.get_table_frames_encoded()
 
