@@ -108,7 +108,7 @@ def start():
 
     name = request.form['name']
     model = request.form['model']
-    randomness = request.form['randomness']
+    randomness = float(request.form['randomness']) / 100.0
 
     print('Starting. Name {}    Model {}    Randomness {}'.format(name, model, randomness))
 
