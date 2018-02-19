@@ -26,16 +26,17 @@ def build_batch(provider, memory):
         s.append(memory[index])
         del memory[index]
 
-    return s + provider.get_batch(sample=32-number_bad)
+    return number_bad, s + provider.get_batch(sample=32-number_bad)
 
 
 for j in range(1000):
-    s = build_batch(d, memory)
+    number_bad, s = build_batch(d, memory)
     _, loss, diff = t.train_step(s)
 
-    bad_indices = np.where(diff > 10)[0]
+    bad_indices = np.where(diff > 5)[0]
     for k in bad_indices:
-        memory.append(s[int(k)])
+        if k > number_bad:
+             memory.append(s[int(k)])
 
     print(datetime.utcnow(), j, 'Loss ', loss, ' diff ', np.mean(diff), ' large ', len(bad_indices), ' memory ', len(memory))
 
