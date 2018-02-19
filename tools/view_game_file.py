@@ -9,7 +9,7 @@ from kicker.visualize import Figure
 #
 nn = NeuralNet(23, (320, 480, 2))
 
-fig = Figure()
+fig = Figure(wait_for_button_press=False, show_images=False)
 
 def show_prediction(before, now, after):
     observation = np.concatenate((before[:,:,1].reshape((320, 480, 1)), now[:,:,1].reshape((320, 480, 1))), axis=2)

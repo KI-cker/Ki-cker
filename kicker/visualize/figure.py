@@ -4,36 +4,64 @@ import seaborn as sns
 
 
 class Figure():
-    def __init__(self):
-        self.figure = pyplot.figure(figsize=(10, 8))
-
-        self.outer = gridspec.GridSpec(2, 1)
+    def __init__(self, wait_for_button_press=True, show_images=True):
 
         self.titles = ['Goal Radial', 'Goal Lateral', 'Defense Radial', 'Defense Lateral', 'Center Radial', 'Center Lateral',
                   'Attack Radial', 'Attack Lateral']
 
-        self.inner = gridspec.GridSpecFromSubplotSpec(1, 3, subplot_spec=self.outer[0])
-        self.inner_plots = gridspec.GridSpecFromSubplotSpec(1, 8, subplot_spec=self.outer[1])
+        self.degrees_of_freedom = len(self.titles)
 
+        if show_images:
+            self.build_plot_with_images()
+        else:
+            self.build_plot_without_images()
+
+        self.wait_for_button_press = wait_for_button_press
+        self.show_images = show_images
+
+        self.history = [[] for _ in range(self.degrees_of_freedom)]
+
+    def build_plot_with_images(self):
+        self.figure = pyplot.figure(figsize=(10, 8))
+        self.outer = gridspec.GridSpec(3, 1)
+        self.inner = gridspec.GridSpecFromSubplotSpec(1, 3, subplot_spec=self.outer[0])
+        self.inner_plots = gridspec.GridSpecFromSubplotSpec(1, self.degrees_of_freedom, subplot_spec=self.outer[1])
+        self.history_plots = gridspec.GridSpecFromSubplotSpec(1, self.degrees_of_freedom, subplot_spec=self.outer[2])
 
     def plot(self, before, now, after, prediction):
         self.figure.clf()
 
-        axes = [pyplot.Subplot(self.figure, self.inner[j]) for j in range(3)]
+        if self.show_images:
+            axes = [pyplot.Subplot(self.figure, self.inner[j]) for j in range(3)]
 
-        axes[0].imshow(before, cmap=cm.Greys_r)
-        axes[1].imshow(now, cmap=cm.Greys_r)
-        axes[2].imshow(after, cmap=cm.Greys_r)
+            axes[0].imshow(before, cmap=cm.Greys_r)
+            axes[1].imshow(now, cmap=cm.Greys_r)
+            axes[2].imshow(after, cmap=cm.Greys_r)
 
-        for j in range(3):
-            axes[j].axis('off')
-            self.figure.add_subplot(axes[j])
+            for j in range(3):
+                axes[j].axis('off')
+                self.figure.add_subplot(axes[j])
 
-        for j in range(8):
+        for j in range(self.degrees_of_freedom):
             axes = pyplot.Subplot(self.figure, self.inner_plots[j])
             sns.barplot(y=prediction[j, :] - np.min(prediction[j, :]), x=['Backward', 'Null', 'Forward'], ax=axes)
             axes.set_title(self.titles[j])
             self.figure.add_subplot(axes)
 
+            self.history[j].append(np.max(prediction[j, :]))
+
+            axes_history = pyplot.Subplot(self.figure, self.history_plots[j])
+            axes_history.plot(self.history[j][-100:])
+            self.figure.add_subplot(axes_history)
+
         self.figure.show()
-        pyplot.waitforbuttonpress(0)
+        if self.wait_for_button_press:
+            pyplot.waitforbuttonpress(0)
+        else:
+            pyplot.waitforbuttonpress(0.1)
+
+    def build_plot_without_images(self):
+        self.figure = pyplot.figure(figsize=(10, 8))
+        self.outer = gridspec.GridSpec(2, 1)
+        self.inner_plots = gridspec.GridSpecFromSubplotSpec(1, self.degrees_of_freedom, subplot_spec=self.outer[0])
+        self.history_plots = gridspec.GridSpecFromSubplotSpec(1, self.degrees_of_freedom, subplot_spec=self.outer[1])
