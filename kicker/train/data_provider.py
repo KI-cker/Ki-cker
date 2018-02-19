@@ -18,7 +18,10 @@ class DataProvider:
         game = self.file[game_name]
 
         index = random.choice(game['good_indices'])
-        received_goal = index in game['goals_received']
+        if 'goals_received' in game:
+            received_goal = index in game['goals_received']
+        else:
+            received_goal = []
 
         result = {
             'observations': [game['table_frames_encoded'][index + j] for j in range(-1, 2)],
