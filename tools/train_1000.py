@@ -19,7 +19,7 @@ memory = []
 
 
 def build_batch(provider, memory):
-    number_bad = min(int(len(memory) / 100), 32)
+    number_bad = min(int(len(memory) / 100), 5)
     s = []
     for _ in range(number_bad):
         index = random.randint(0, len(memory) - 1)
@@ -33,7 +33,7 @@ for j in range(1000):
     s = build_batch(d, memory)
     _, loss, diff = t.train_step(s)
 
-    bad_indices = np.where(diff > 2)[0]
+    bad_indices = np.where(diff > 10)[0]
     for k in bad_indices:
         memory.append(s[int(k)])
 
