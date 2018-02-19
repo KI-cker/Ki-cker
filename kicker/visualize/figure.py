@@ -26,7 +26,7 @@ class Figure():
         self.outer = gridspec.GridSpec(3, 1)
         self.inner = gridspec.GridSpecFromSubplotSpec(1, 3, subplot_spec=self.outer[0])
         self.inner_plots = gridspec.GridSpecFromSubplotSpec(1, self.degrees_of_freedom, subplot_spec=self.outer[1])
-        self.history_plots = gridspec.GridSpecFromSubplotSpec(1, self.degrees_of_freedom, subplot_spec=self.outer[2])
+        self.history_plots = gridspec.GridSpecFromSubplotSpec(1, int(self.degrees_of_freedom / 2), subplot_spec=self.outer[2])
 
     def plot(self, before, now, after, prediction):
         self.figure.clf()
@@ -50,8 +50,10 @@ class Figure():
 
             self.history[j].append(np.max(prediction[j, :]))
 
+        for j in range(int(self.degrees_of_freedom / 2)):
             axes_history = pyplot.Subplot(self.figure, self.history_plots[j])
-            axes_history.plot(self.history[j][-100:])
+            l = len(self.history[0][-100:])
+            axes_history.plot(range(l), self.history[2 * j][-100:], range(l), self.history[2 * j + 1][-100:])
             self.figure.add_subplot(axes_history)
 
         self.figure.show()
