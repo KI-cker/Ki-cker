@@ -1,11 +1,12 @@
 import logging
 
+from kicker.opcua_base import OpcuaBase
 from opcua import ua
 
-from kicker.opcua_base import OpcuaBase
-from kicker.opcua_constants import PosMode_Ack_Rot_Tor, PosMode_Ack_Rot_Verteidiung, PosMode_Ack_Rot_Mittelfeld, \
+from kicker.opcua.opcua_constants import PosMode_Ack_Rot_Tor, PosMode_Ack_Rot_Verteidiung, PosMode_Ack_Rot_Mittelfeld, \
     PosMode_Ack_Rot_Sturm, PosMode_Ack_Trans_Tor, PosMode_Ack_Trans_Verteidiung, PosMode_Ack_Trans_Mittelfeld, \
     PosMode_Ack_Trans_Sturm, Axis
+
 
 class OpcuaController(OpcuaBase):
     def __init__(self):

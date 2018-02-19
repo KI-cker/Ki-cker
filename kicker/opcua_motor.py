@@ -1,6 +1,6 @@
 import logging
 
-from kicker.opcua_controller import OpcuaController
+from kicker.opcua.opcua_controller import OpcuaController
 
 logging.basicConfig(filename='opcua.log', level=logging.ERROR, format='%(asctime)s %(filename)s %(lineno)d %(levelname)s %(message)s')
 
