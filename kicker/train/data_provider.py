@@ -25,7 +25,7 @@ class DataProvider:
 
         result = {
             'observations': [game['table_frames_encoded'][index + j] for j in range(-1, 2)],
-            'score': game['scores'][index],
+            'score': 0.1 * game['scores'][index],
             'action': [a + 1 for a in game['actions'][index]],
             'terminal': received_goal
         }
