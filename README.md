@@ -50,3 +50,9 @@ one can visualize what the neural net sees. One sees the three subsequent frames
 [gr, gl, dr, dl, cr, cl, ar, al]
 ```
 where g = goal, d = defense, c = center, a = attack and r = rotation, l = lateral. 0 corresponds to no movement, 1 to forward, -1 to backward.
+
+The tool
+```
+python tools/view_game_file.py
+```
+shows a specific game. Useful for inspecting the progress of neural net training.
