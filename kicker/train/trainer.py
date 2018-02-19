@@ -5,7 +5,7 @@ from keras import backend as K
 
 class Trainer:
     def __init__(self, neural_net, shape=(320, 480)):
-        self.gamma = 0.9
+        self.gamma = 0.99
         self.neural_net = neural_net
 
         self.width = shape[1]
@@ -48,7 +48,7 @@ class Trainer:
 
         loss = tf.losses.huber_loss(q_new, q_old)
 
-        train_step = tf.train.AdamOptimizer(1e-6).minimize(loss)
+        train_step = tf.train.AdamOptimizer(1e-5).minimize(loss)
 
         return train_step, loss, tf.reduce_mean(tf.abs(q_new - q_old))
 
