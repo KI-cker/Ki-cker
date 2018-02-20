@@ -5,7 +5,7 @@ from opcua import ua
 
 from kicker.opcua.opcua_constants import PosMode_Ack_Rot_Tor, PosMode_Ack_Rot_Verteidiung, PosMode_Ack_Rot_Mittelfeld, \
     PosMode_Ack_Rot_Sturm, PosMode_Ack_Trans_Tor, PosMode_Ack_Trans_Verteidiung, PosMode_Ack_Trans_Mittelfeld, \
-    PosMode_Ack_Trans_Sturm, Axis
+    PosMode_Ack_Trans_Sturm, Axis, startEmulation
 
 
 class OpcuaController(OpcuaBase):
@@ -13,7 +13,7 @@ class OpcuaController(OpcuaBase):
         super(OpcuaController, self).__init__()
 
     def resetEmulation(self):
-        var = self.client.get_node(ua.NodeId(resetEmulation[0], resetEmulation[1]))
+        var = self.client.get_node(ua.NodeId(startEmulation[0], startEmulation[1]))
         var.set_value(ua.Variant(True, ua.VariantType.Boolean))
 
     def connect(self):
