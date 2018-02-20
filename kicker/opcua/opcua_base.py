@@ -1,10 +1,10 @@
 from opcua import ua
 from opcua import Client
 
-from kicker.opcua_motor import Axis, SubScriptionHandler
+from kicker.opcua.opcua_constants import Axis, SubScriptionHandler
 
 
-class OpcuaBase:
+class OpcuaBase(object):
     def __init__(self):
         self.client = Client("opc.tcp://192.168.42.20:4840")
 

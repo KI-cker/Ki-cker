@@ -5,23 +5,9 @@ from kicker.opcua.opcua_controller import OpcuaController
 logging.basicConfig(filename='opcua.log', level=logging.ERROR, format='%(asctime)s %(filename)s %(lineno)d %(levelname)s %(message)s')
 
 
-#handler for subscriptions
-class SubScriptionHandler(object):
-    def datachange_notification(self, node, val, data):
-        value = data.monitored_item.Value.Value.Value
-        nodeid = data.subscription_data.node.nodeid.Identifier
-        timestamp = data.monitored_item.Value.ServerTimestamp
-        logging.debug("nodeid: ", nodeid, ";value:",value,";timestamp:",timestamp)
-        logging.debug("Subscription",node, val, dir(data.subscription_data.node.nodeid))
-        ###Implement your target-method here!####
-#end handler for subscriptions
-
-
-
-
 class MotorController(OpcuaController):
     def __init__(self):
-        super().__init__()
+        super(MotorController, self).__init__()
         self.connect()
 
         self.last_action = [0, 0, 0, 0, 0, 0, 0, 0]

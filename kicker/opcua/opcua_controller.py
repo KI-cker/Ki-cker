@@ -1,6 +1,6 @@
 import logging
 
-from kicker.opcua_base import OpcuaBase
+from kicker.opcua.opcua_base import OpcuaBase
 from opcua import ua
 
 from kicker.opcua.opcua_constants import PosMode_Ack_Rot_Tor, PosMode_Ack_Rot_Verteidiung, PosMode_Ack_Rot_Mittelfeld, \
@@ -10,7 +10,7 @@ from kicker.opcua.opcua_constants import PosMode_Ack_Rot_Tor, PosMode_Ack_Rot_Ve
 
 class OpcuaController(OpcuaBase):
     def __init__(self):
-        super().__init__()
+        super(OpcuaController, self).__init__()
 
     def resetEmulation(self):
         var = self.client.get_node(ua.NodeId(resetEmulation[0], resetEmulation[1]))

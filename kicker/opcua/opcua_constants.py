@@ -78,3 +78,18 @@ AxisRot4        = [Axis4_Rot_JogNegative, Axis4_Rot_JogPositive, ActualPosition_
 AxisTrans4      = [Axis4_Trans_JogNegative, Axis4_Trans_JogPositive, ActualPosition_Axis4_Trans, ActualVelocity_Axis4_Trans,Axis4_Trans_lower_limit_vel,Axis4_Trans_upper_limit_vel,Axis4_Trans_abs_limit_acc]
 Axis4 = [AxisRot4,AxisTrans4]
 Axis = [Axis1,Axis2,Axis3,Axis4]
+
+#handler for subscriptions
+class SubScriptionHandler(object):
+    def datachange_notification(self, node, val, data):
+        value = data.monitored_item.Value.Value.Value
+        nodeid = data.subscription_data.node.nodeid.Identifier
+        timestamp = data.monitored_item.Value.ServerTimestamp
+        logging.debug("nodeid: ", nodeid, ";value:",value,";timestamp:",timestamp)
+        logging.debug("Subscription",node, val, dir(data.subscription_data.node.nodeid))
+        ###Implement your target-method here!####
+#end handler for subscriptions
+
+
+
+
