@@ -6,8 +6,6 @@ from kicker.agents.agent import Agent
 from kicker.agents.helper import convert_neural_net_result_to_actions
 from kicker.image import Analyzer
 from kicker.neural_net import NeuralNet
-from kicker.visualize import Figure
-
 
 class NeuralNetAgent(Agent):
     def __init__(self, randomness=0.5, neural_net_filename='model.h5'):
@@ -21,8 +19,6 @@ class NeuralNetAgent(Agent):
         self.randomness = randomness
 
         self.neural_net = NeuralNet(24, self.shape, filename=neural_net_filename)
-
-        self.figure = Figure(wait_for_button_press=False, show_images=False)
 
     def read_config(self):
         with open('config.yml', 'r') as f:
@@ -39,9 +35,6 @@ class NeuralNetAgent(Agent):
 
         res = self.neural_net.predict_single(np.concatenate((self.last_frame, first_frame), axis=2))
         self.inputs = convert_neural_net_result_to_actions(res)
-
-
-        self.figure.show_images(None, None, None, res)
 
         if random.random() < self.randomness:
             self.inputs = [random.randint(0, 2) - 1 for k in range(0, 8)]
