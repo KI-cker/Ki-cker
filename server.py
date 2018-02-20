@@ -1,12 +1,9 @@
 from flask import Flask, render_template, redirect, url_for, request, send_from_directory
 
 import cv2
-import tensorflow as tf
-import keras.backend.tensorflow_backend as KTF
 import yaml
 import time
 
-from kicker.agents.neural_net_agent import NeuralNetAgent
 from kicker.opcua_motor import MotorController
 from kicker.storage import storage_worker
 
@@ -22,6 +19,9 @@ logging.info("Fussball ist wie Schach nur ohne Wuerfel")
 from glob import glob
 
 def worker(queue, name, model, randomness):
+    import tensorflow as tf
+    from kicker.agents.neural_net_agent import NeuralNetAgent
+    import keras.backend.tensorflow_backend as KTF
     config = tf.ConfigProto()
     config.gpu_options.allow_growth = True
     sess = tf.Session(config=config)

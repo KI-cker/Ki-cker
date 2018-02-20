@@ -2,7 +2,7 @@ import logging
 from kicker.storage.storage import Storage
 
 
-def storage_worker(queue, config, filename='model.h5'):
+def storage_worker(queue, config, filename='games.h5'):
     s = Storage(config, filename=filename)
 
     while True:
