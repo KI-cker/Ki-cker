@@ -1,7 +1,7 @@
 import numpy as np
 
 from kicker.train import DataProvider, Parser
-from kicker import NeuralNet
+from kicker.neural_net import NeuralNet
 from kicker.visualize import Figure
 
 # d = DataProvider(return_observations=True, filename='train/training_data_new.h5')
