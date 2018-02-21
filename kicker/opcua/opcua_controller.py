@@ -12,9 +12,9 @@ class OpcuaController(OpcuaBase):
     def __init__(self):
         super(OpcuaController, self).__init__()
 
-    def resetEmulation(self):
+    def resetEmulation(self, value=True):
         var = self.client.get_node(ua.NodeId(startEmulation[0], startEmulation[1]))
-        var.set_value(ua.Variant(True, ua.VariantType.Boolean))
+        var.set_value(ua.Variant(value, ua.VariantType.Boolean))
 
     def connect(self):
         self.client.connect()

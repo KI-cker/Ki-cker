@@ -34,6 +34,8 @@ def worker(queue, name, model, randomness):
     logging.info('started neural net')
     motor = MotorController()
 
+    motor.resetEmulation()
+
     logging.info('started motor')
 
     video = cv2.VideoCapture(1)
@@ -71,6 +73,7 @@ def worker(queue, name, model, randomness):
     queue.get()
     storage_queue.put((None, None))
     storage_process.join()
+    motor.resetEmulation(False)
     motor.disconnect()
 
 
