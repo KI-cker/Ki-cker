@@ -67,4 +67,3 @@ def worker(queue, video_queue, name, model, randomness):
     storage_process.join()
     motor.resetEmulation(False)
     motor.disconnect()
-    pygame.quit()
