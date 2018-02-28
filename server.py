@@ -64,7 +64,7 @@ def generate_video(video_queue):
         time_diff = time.time() - start_time
         frame = video_queue.get()
         cv2.putText(frame, '{}'.format(time_diff), (10, 50), font, 1, (255, 255, 255))
-        cv2.putText(frame, '{}'.format(float(number)/time_diff), (10, 100), font, 1, (255, 255, 255))
+        cv2.putText(frame, 'FPS {}'.format(float(number)/time_diff), (10, 100), font, 1, (255, 255, 255))
         jpeg_frame = cv2.imencode('.jpg', frame)[1].tobytes()
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + jpeg_frame + b'\r\n')
