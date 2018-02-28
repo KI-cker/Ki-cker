@@ -18,12 +18,6 @@ def worker(queue, video_queue, name, model, randomness):
     sess = tf.Session(config=config)
     KTF.set_session(sess)
 
-    import pygame
-    pygame.init()
-    pygame.font.init()
-
-    screen = pygame.display.set_mode((1024, 800))
-
     logging.info('started session')
 
     agent = NeuralNetAgent(randomness=randomness, neural_net_filename=model)
@@ -63,9 +57,6 @@ def worker(queue, video_queue, name, model, randomness):
             if temp_inputs is not None:
                 inputs = temp_inputs
                 motor.control(inputs)
-
-            pygame.surfarray.blit_array(screen, f)
-            pygame.display.update()
 
             storage_queue.put((f, inputs))
             video_queue.put(f)
