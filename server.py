@@ -57,9 +57,13 @@ def start():
 
 def generate_video(video_queue):
     font = cv2.FONT_HERSHEY_SIMPLEX
+    start_time = time.time()
+    number = 1
     while True:
+        number = number + 1
         frame = video_queue.get()
-        cv2.putText(frame, '' + time.time(), (10, 10), font, 4, (255, 255, 255), 2, cv2.LINE_AA)
+        cv2.putText(frame, '{}'.format(time.time() - start_time), (10, 50), font, 4, (255, 255, 255))
+        cv2.putText(frame, '{}'.format((time.time() - start_time)/number), (10, 100), font, 4, (255, 255, 255))
         jpeg_frame = cv2.imencode('.jpg', frame)[1].tobytes()
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + jpeg_frame + b'\r\n')
