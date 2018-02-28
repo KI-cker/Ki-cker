@@ -8,7 +8,7 @@ from multiprocessing import Queue, Process
 from kicker.opcua_motor import MotorController
 from kicker.storage import storage_worker
 
-def worker(queue, name, model, randomness):
+def worker(queue, video_queue, name, model, randomness):
     import tensorflow as tf
     from kicker.agents.neural_net_agent import NeuralNetAgent
     import keras.backend.tensorflow_backend as KTF
@@ -68,6 +68,7 @@ def worker(queue, name, model, randomness):
             pygame.display.update()
 
             storage_queue.put((f, inputs))
+            video_queue.put(f)
 
 
     queue.get()

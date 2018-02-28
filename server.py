@@ -1,7 +1,8 @@
 import logging
+import cv2
 from multiprocessing import Process, Queue
 
-from flask import Flask, render_template, redirect, url_for, request
+from flask import Flask, render_template, redirect, url_for, request, Response
 
 from kicker.server.worker import worker
 
@@ -13,6 +14,7 @@ from glob import glob
 process = None
 
 stop_queue = Queue()
+video_queue = Queue()
 app = Flask('__name__', static_url_path='/assets', static_folder='templates/assets')
 
 @app.route('/')
@@ -39,7 +41,7 @@ def stop():
 
 @app.route('/start', methods=['POST'])
 def start():
-    global process, stop_queue
+    global process, stop_queue, video_queue
 
     name = request.form['name']
     model = request.form['model']
@@ -47,10 +49,24 @@ def start():
 
     print('Starting. Name {}    Model {}    Randomness {}'.format(name, model, randomness))
 
-    process = Process(target=worker, args=(stop_queue, name, model, randomness))
+    process = Process(target=worker, args=(stop_queue, video_queue, name, model, randomness))
     process.start()
 
     return redirect(url_for('index'))
+
+def generate_video(video_queue):
+    while True:
+        frame = video_queue.get()
+        jpeg_frame = cv2.imencode('.jpg', frame)[1].tobytes()
+        yield (b'--frame\r\n'
+               b'Content-Type: image/jpeg\r\n\r\n' + jpeg_frame + b'\r\n')
+
+
+@app.route('/video')
+def video_feed():
+    return Response(generate_video(video_queue),
+                    mimetype='multipart/x-mixed-replace; boundary=frame')
+
 
 if __name__ == '__main__':
     app.run(debug=False, host='0.0.0.0')
