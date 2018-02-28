@@ -1,5 +1,6 @@
 import logging
 import cv2
+import time
 from multiprocessing import Process, Queue
 
 from flask import Flask, render_template, redirect, url_for, request, Response
@@ -55,8 +56,10 @@ def start():
     return redirect(url_for('index'))
 
 def generate_video(video_queue):
+    font = cv2.FONT_HERSHEY_SIMPLEX
     while True:
         frame = video_queue.get()
+        cv2.putText(frame, '' + time.time(), (10, 10), font, 4, (255, 255, 255), 2, cv2.LINE_AA)
         jpeg_frame = cv2.imencode('.jpg', frame)[1].tobytes()
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + jpeg_frame + b'\r\n')
