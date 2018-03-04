@@ -6,6 +6,7 @@ from keras import backend as K
 class Trainer:
     def __init__(self, neural_net, shape=(320, 480)):
         self.gamma = 0.99
+        self.punishment_for_moving = 0.1
         self.neural_net = neural_net
 
         self.width = shape[1]
@@ -44,7 +45,7 @@ class Trainer:
 
 
         second_term = self.gamma * tf.reduce_max(computed_next, axis=2)
-        q_new = tf.stop_gradient(rewards + tf.where(terminals, tf.zeros_like(second_term), second_term))
+        q_new = tf.stop_gradient(rewards + tf.where(terminals, tf.zeros_like(second_term), second_term) - self.punishment_for_moving * tf.abs(actions))
 
         loss = tf.losses.huber_loss(q_new, q_old)
 
