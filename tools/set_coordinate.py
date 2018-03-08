@@ -7,10 +7,12 @@ import os
 import yaml
 
 def load_frame():
-    f = h5py.File('games.h5')
+    f = h5py.File('train/Fabian_20180308_080924.h5')
     g = f['game1']
     frames = g['frames']
-    return frames[0]
+    b = bytearray()
+    b.extend(frames[0])
+    return cv2.imdecode(np.array(b), cv2.IMREAD_COLOR)
 
 def get_frame_camera():
     cap = cv2.VideoCapture(1)
@@ -33,7 +35,7 @@ def set_variable(var_name, value):
         with open(config_file_name, 'r') as f:
             config = yaml.load(f)
 
-    if not config.has_key('coordinates'):
+    if 'coordinates' not in config:
         config['coordinates'] = {};
 
     config['coordinates'][var_name] = value
@@ -50,9 +52,10 @@ def main():
     var_name = get_variable_name()
     pygame.init()
 
-    # frame = load_frame()
-    frame = get_frame_camera()
+    frame = load_frame()
+    # frame = get_frame_camera()
     shape = frame.shape
+    print(shape)
     screen = pygame.display.set_mode((shape[0], shape[1]))
 
     pygame.surfarray.blit_array(screen, frame)
