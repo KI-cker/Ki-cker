@@ -37,6 +37,7 @@ def stop():
     process_backup = process
     process = None
     process_backup.join()
+    video_queue.join()
 
     return redirect(url_for('index'))
 
@@ -59,15 +60,19 @@ def generate_video(video_queue):
     font = cv2.FONT_HERSHEY_SIMPLEX
     start_time = time.time()
     number = 1
+    frame = None
     while True:
-        number = number + 1
-        time_diff = time.time() - start_time
-        frame = video_queue.get()
-        cv2.putText(frame, '{}'.format(time_diff), (10, 50), font, 1, (255, 255, 255))
-        cv2.putText(frame, 'FPS {}'.format(float(number)/time_diff), (10, 100), font, 1, (255, 255, 255))
-        jpeg_frame = cv2.imencode('.jpg', frame)[1].tobytes()
-        yield (b'--frame\r\n'
-               b'Content-Type: image/jpeg\r\n\r\n' + jpeg_frame + b'\r\n')
+        while not video_queue.empty():
+            number = number + 1
+            frame = video_queue.get()
+
+        if frame is not None:
+            time_diff = time.time() - start_time
+            cv2.putText(frame, '{}'.format(time_diff), (10, 50), font, 1, (255, 255, 255))
+            cv2.putText(frame, 'FPS {}'.format(float(number)/time_diff), (10, 100), font, 1, (255, 255, 255))
+            jpeg_frame = cv2.imencode('.jpg', frame)[1].tobytes()
+            yield (b'--frame\r\n'
+                   b'Content-Type: image/jpeg\r\n\r\n' + jpeg_frame + b'\r\n')
 
 
 @app.route('/video')
@@ -77,4 +82,4 @@ def video_feed():
 
 
 if __name__ == '__main__':
-    app.run(debug=False, host='0.0.0.0')
+    app.run(debug=True, host='0.0.0.0')
