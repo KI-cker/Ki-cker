@@ -19,7 +19,7 @@ memory = []
 
 
 def build_batch(provider, memory):
-    number_bad = min(int(len(memory) / 100), 5)
+    number_bad = min(int(len(memory) / 100), 0)
     s = []
     for _ in range(number_bad):
         index = random.randint(0, len(memory) - 1)
@@ -29,7 +29,7 @@ def build_batch(provider, memory):
     return number_bad, s + provider.get_batch(sample=32-number_bad)
 
 
-for j in range(5000):
+for j in range(500):
     number_bad, s = build_batch(d, memory)
     _, loss, diff, computed = t.train_step(s)
 
@@ -38,7 +38,7 @@ for j in range(5000):
         if k > number_bad:
              memory.append(s[int(k)])
 
-    print(datetime.utcnow(), j, 'Loss ', loss, ' diff ', np.mean(diff), ' large ', len(bad_indices), ' memory ', len(memory), ' computed moves ', sum(np.abs(computed))/ 32)
+    print(datetime.utcnow(), j, 'Loss ', loss, ' diff ', np.mean(diff), ' large ', len(bad_indices), ' memory ', len(memory), ' computed moves ', np.sum(np.abs(computed - 1))/ 32 / 8, ' terminals ', np.sum([t['terminal'] for t in s]))
 
 
 nn.save()

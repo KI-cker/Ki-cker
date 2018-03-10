@@ -49,13 +49,13 @@ class Trainer:
 
 
         second_term = self.gamma * tf.reduce_max(computed_next, axis=2)
-        q_new = tf.stop_gradient(rewards + tf.where(terminals, tf.zeros_like(second_term), second_term) - self.punishment_for_moving * tf.abs(tf.cast(actions, tf.float32)))
+        q_new = tf.stop_gradient(rewards + tf.where(terminals, tf.zeros_like(second_term), second_term))
 
         loss = tf.losses.huber_loss(q_new, q_old)
 
         train_step = tf.train.AdamOptimizer(1e-5).minimize(loss)
 
-        return train_step, loss, tf.abs(q_new - q_old), tf.reduce_max(computed, axis=2)
+        return train_step, loss, tf.abs(q_new - q_old), tf.argmax(computed, axis=2)
 
     def convert_images(self, inputs):
         return tf.transpose(tf.map_fn(lambda i: tf.image.decode_jpeg(i), inputs, dtype=tf.uint8)[:,:,:,0], [1,2,0])
@@ -71,7 +71,7 @@ class Trainer:
 
     def build_feed_dict(self, batch):
         return {
-            'rewards:0': [[s['score'],] * 8 for s in batch],
+            'rewards:0': [[s['score'] - 0.1 * abs(a - 1) for a in s['action']] for s in batch],
             'actions:0': [s['action'] for s in batch],
             'observations:0': [s['observations'] for s in batch],
             'terminal:0': [s['terminal'] for s in batch]
