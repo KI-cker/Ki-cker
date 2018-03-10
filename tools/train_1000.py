@@ -7,8 +7,8 @@ from kicker.train import DataProvider
 d = DataProvider()
 
 from kicker.train import Trainer
-from kicker import NeuralNet
-nn = NeuralNet(24, (320, 480, 2))
+from kicker.neural_net import NeuralNet
+nn = NeuralNet()
 
 t = Trainer(nn)
 

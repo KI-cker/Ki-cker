@@ -27,7 +27,7 @@ def build_net(input_shape, num_outputs):
     return model
 
 class NeuralNet():
-    def __init__(self, num_output, input_shape, filename='model.h5'):
+    def __init__(self, num_output=24, input_shape=(320, 480, 5), filename='model.h5'):
         self.num_output = num_output
         self.input_shape = input_shape
         self.filename = filename

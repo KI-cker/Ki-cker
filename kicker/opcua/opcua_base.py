@@ -4,9 +4,10 @@ from opcua import Client
 from kicker.opcua.opcua_constants import Axis, SubScriptionHandler
 
 class OpcuaBase(object):
-    def __init__(self):
+    def __init__(self, address="opc.tcp://192.168.42.20:4840"):
         # self.client = Client("opc.tcp://100.102.7.5:4840")
-        self.client = Client("opc.tcp://192.168.42.20:4840")
+        self.address = address
+        self.client = Client(self.address)
 
     def readValue_polling(self, nodeId, namespace):
         var = self.client.get_node(ua.NodeId(nodeId, namespace))

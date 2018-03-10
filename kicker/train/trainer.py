@@ -4,36 +4,40 @@ from keras import backend as K
 
 
 class Trainer:
-    def __init__(self, neural_net, shape=(320, 480)):
+    def __init__(self, neural_net, shape=(320, 480), frame_count=5):
         self.gamma = 0.99
         self.punishment_for_moving = 0.1
         self.neural_net = neural_net
 
         self.width = shape[1]
         self.height = shape[0]
+        self.frame_count = frame_count
 
+        self.observations_img = self.build_image_processor()
         self.tf_train_step = self.build_train_step()
 
         # writer = tf.summary.FileWriter(logdir='logs', graph=K.get_session.get_graph())
         # writer.flush()
 
-    def build_train_step(self):
-        observations = tf.placeholder(tf.string, shape=[None, 3], name='observations')
-        # inputs = tf.placeholder(tf.float32, shape=[None, self.height, self.width, 2], name='inputs')
-        # inputs_next = tf.placeholder(tf.float32, shape=[None, self.height, self.width, 2], name='inputs_next')
 
+    def build_image_processor(self):
+        observations = tf.placeholder(tf.string, shape=[None, self.frame_count + 1], name='observations')
+        observations_img = tf.cast(tf.map_fn(lambda i: self.convert_images(i), observations, dtype=tf.uint8), tf.float32)
+        observations_img.set_shape([None, self.width, self.height, self.frame_count + 1])
+
+        return observations_img
+
+    def build_train_step(self):
         rewards = tf.placeholder(tf.float32, shape=[None, 8], name='rewards')
         actions = tf.placeholder(tf.uint8, shape=[None, 8], name='actions')
         terminals = tf.placeholder(tf.bool, shape=[None], name='terminal')
 
-        observations_img = tf.cast(tf.map_fn(lambda i: self.convert_images(i), observations, dtype=tf.uint8), tf.float32)
-        observations_img.set_shape([None, self.width, self.height, 3])
 
-        inputs = observations_img[:,:,:,0:2]
-        inputs_next = observations_img[:,:,:,1:3]
+        inputs = self.observations_img[:,:,:,:self.frame_count]
+        inputs_next = self.observations_img[:,:,:,1:]
 
-        inputs.set_shape([None, self.width, self.height, 2])
-        inputs_next.set_shape([None, self.width, self.height, 2])
+        inputs.set_shape([None, self.width, self.height, self.frame_count])
+        inputs_next.set_shape([None, self.width, self.height, self.frame_count])
 
 
         computed = self.evaluate_input(inputs)
@@ -45,7 +49,7 @@ class Trainer:
 
 
         second_term = self.gamma * tf.reduce_max(computed_next, axis=2)
-        q_new = tf.stop_gradient(rewards + tf.where(terminals, tf.zeros_like(second_term), second_term) - self.punishment_for_moving * tf.abs(actions))
+        q_new = tf.stop_gradient(rewards + tf.where(terminals, tf.zeros_like(second_term), second_term) - self.punishment_for_moving * tf.abs(tf.cast(actions, tf.float32)))
 
         loss = tf.losses.huber_loss(q_new, q_old)
 
