@@ -55,7 +55,7 @@ class Trainer:
 
         train_step = tf.train.AdamOptimizer(1e-5).minimize(loss)
 
-        return train_step, loss, tf.abs(q_new - q_old)
+        return train_step, loss, tf.abs(q_new - q_old), tf.reduce_max(computed, axis=2)
 
     def convert_images(self, inputs):
         return tf.transpose(tf.map_fn(lambda i: tf.image.decode_jpeg(i), inputs, dtype=tf.uint8)[:,:,:,0], [1,2,0])

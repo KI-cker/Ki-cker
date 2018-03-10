@@ -34,6 +34,7 @@ class NeuralNet():
         if os.path.isfile(self.filename):
             self.model = load_model(self.filename)
         else:
+            print('Building new model')
             self.model = build_net(input_shape, num_output)
 
     def save(self):
