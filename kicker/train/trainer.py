@@ -52,6 +52,8 @@ class Trainer:
         q_new = tf.stop_gradient(rewards + tf.where(terminals, tf.zeros_like(second_term), second_term))
 
         loss = tf.losses.huber_loss(q_new, q_old)
+        loss = loss + 0.1 * tf.reduce_mean(tf.nn.relu(computed[:,:,0] - computed[:,:,1]))
+        loss = loss + 0.1 * tf.reduce_mean(tf.nn.relu(computed[:,:,2] - computed[:,:,1]))
 
         train_step = tf.train.AdamOptimizer(1e-5).minimize(loss)
 
@@ -71,7 +73,7 @@ class Trainer:
 
     def build_feed_dict(self, batch):
         return {
-            'rewards:0': [[s['score'] - 0.1 * abs(a - 1) for a in s['action']] for s in batch],
+            'rewards:0': [[s['score'],] * 8 for s in batch],
             'actions:0': [s['action'] for s in batch],
             'observations:0': [s['observations'] for s in batch],
             'terminal:0': [s['terminal'] for s in batch]
