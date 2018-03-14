@@ -39,18 +39,14 @@ div {
         <label for="model">Model</label>
         <select name="model" id="model">
             {% for model in models %}
-            <option value="model">{{ model }}</option>
+            <option value="{{ model }}">{{ model }}</option>
             {% endfor %}
         </select><br/>
-        <label for="randomness">Randomness</label>
-        <input id="randomness" name="randomness" type="range"/><br/>
+        <label for="randomness">Exploration</label>
+        <input id="randomness" name="randomness" type="range" value="10"/><br/>
         <label></label>
         <input type="submit" value="Start">
         </form>
 
-        <div>
-            <img src="assets/tng.png">
-            <img src="assets/rexroth.jpg">
-        </div>
     </body>
 </html>

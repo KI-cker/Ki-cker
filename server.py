@@ -37,7 +37,6 @@ def stop():
     process_backup = process
     process = None
     process_backup.join()
-    video_queue.join()
 
     return redirect(url_for('index'))
 
