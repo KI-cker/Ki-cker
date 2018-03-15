@@ -3,6 +3,7 @@ import h5py
 import numpy as np
 import logging
 
+import time
 import yaml
 
 
@@ -12,6 +13,7 @@ class Storage():
         self.frames = None
         self.actions = None
         self.shape = None
+        self.times = None
         self.config = config
 
     def add_frame(self, frame):
@@ -19,8 +21,10 @@ class Storage():
             self.shape = (1, ) + frame.shape
             self.frames = [cv2.imencode('.jpg', frame)[1].tostring()]
             # self.frames = frame.reshape(self.shape)
+            self.times = [time.time()]
         else:
             self.frames.append(cv2.imencode('.jpg', frame)[1].tostring())
+            self.times.append(time.time())
             # self.frames = np.concatenate((self.frames, frame.reshape(self.shape)), axis=0)
         
     def add_action(self, action):
@@ -37,6 +41,7 @@ class Storage():
         g.attrs['config'] = yaml.dump(self.config)
         g.create_dataset('frames', data=self.frames, compression='lzf')
         g.create_dataset('actions', data=self.actions, compression='lzf')
+        g.create_dataset('times', data=self.times, compression='lzf')
         self.file.flush()
         self._reset()
         logging.info("Done saving")
@@ -44,6 +49,7 @@ class Storage():
     def _reset(self):
         self.frames = None
         self.actions = None
+        self.times = None
 
     def _next_dataset(self):
         return "game{}".format(len(self.file.keys()) + 1)
