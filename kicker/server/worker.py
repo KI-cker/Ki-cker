@@ -59,7 +59,7 @@ def worker(queue, video_queue, name, model, randomness):
                 motor.control(inputs)
 
             storage_queue.put((f, inputs))
-            video_queue.put(f)
+            # video_queue.put(f)
 
 
     queue.get()
