@@ -1,4 +1,8 @@
 import random
+import tensorflow as tf
+
+from keras import backend as K
+
 
 import numpy as np
 
@@ -9,11 +13,16 @@ import yaml
 class MemoryDataProvider:
     def __init__(self, filename='train/training_data.h5'):
         self.file = h5py.File(filename)
+        self.width = 320
+        self.height = 480
         self.frames = []
+
+        self.observations_img = self.build_decoder()
 
     def load(self):
         for game_name in self.file:
             self.frames = self.frames + self.get_train_game_data(game_name)
+            print('Done loading {}', game_name)
 
     def decode_image(self, raw):
         b = bytearray()
@@ -22,7 +31,10 @@ class MemoryDataProvider:
 
     def get_train_game_data(self, game):
         data = self.file[game]
-        table_frames = [self.decode_image(i)[:,:,1] for i in data['table_frames_encoded']]
+
+        images = self.decode([i for i in data['table_frames_encoded']])
+
+        table_frames = [i[:,:,1] for i in images]
         positions = [p for p in data['ball_pos']]
         actions = [a for a in data['actions']]
         scores = [s for s in data['scores']]
@@ -43,3 +55,17 @@ class MemoryDataProvider:
 
     def get_batch(self, sample=32):
         return random.sample(self.frames, sample)
+
+    def build_decoder(self):
+        observations = tf.placeholder(tf.string, shape=[None], name='observations')
+        observations_img = tf.cast(tf.map_fn(lambda i: tf.image.decode_jpeg(i), observations, dtype=tf.uint8), tf.float32)
+        observations_img.set_shape([None, self.width, self.height, 3])
+
+        return observations_img
+
+    def decode(self, images):
+        sess = K.get_session()
+
+        return sess.run(self.observations_img, feed_dict={
+            'observations:0': images
+        })
