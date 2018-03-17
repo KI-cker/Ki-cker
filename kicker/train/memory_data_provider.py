@@ -46,7 +46,7 @@ class MemoryDataProvider:
         observations = [np.swapaxes(np.swapaxes(table_frames[k:k+6], 0, 2), 0, 1) for k in range(0, length - 7)]
 
         for k in goals_received:
-            scores[k  + 5] = - 100
+            scores[k] = - 100
 
         return [{
             'action': [a + 1 for a in actions[k + 5]],
