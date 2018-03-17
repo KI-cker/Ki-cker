@@ -9,8 +9,8 @@ class Trainer:
         self.punishment_for_moving = 0.1
         self.neural_net = neural_net
 
-        self.width = shape[1]
-        self.height = shape[0]
+        self.width = shape[0]
+        self.height = shape[1]
         self.frame_count = frame_count
 
         self.observations_img = self.build_image_processor()
@@ -27,17 +27,27 @@ class Trainer:
 
         return observations_img
 
+    def decode(self, images):
+        sess = K.get_session()
+
+        return sess.run(self.observations_img, feed_dict={
+            'observations:0': images
+        })
+
     def build_train_step(self):
         rewards = tf.placeholder(tf.float32, shape=[None, 8], name='rewards')
         actions = tf.placeholder(tf.uint8, shape=[None, 8], name='actions')
         terminals = tf.placeholder(tf.bool, shape=[None], name='terminal')
 
 
-        inputs = self.observations_img[:,:,:,:self.frame_count]
-        inputs_next = self.observations_img[:,:,:,1:]
+        # inputs = self.observations_img[:,:,:,:self.frame_count]
+        # inputs_next = self.observations_img[:,:,:,1:]
 
-        inputs.set_shape([None, self.width, self.height, self.frame_count])
-        inputs_next.set_shape([None, self.width, self.height, self.frame_count])
+        # inputs.set_shape([None, self.width, self.height, self.frame_count])
+        # inputs_next.set_shape([None, self.width, self.height, self.frame_count])
+
+        inputs = tf.placeholder(tf.float32, shape=[None, self.width, self.height, self.frame_count], name='inputs')
+        inputs_next = tf.placeholder(tf.float32, shape=[None, self.width, self.height, self.frame_count], name='inputs_next')
 
 
         computed = self.evaluate_input(inputs)
@@ -75,8 +85,8 @@ class Trainer:
         return {
             'rewards:0': [[s['score'],] * 8 for s in batch],
             'actions:0': [s['action'] for s in batch],
-            'observations:0': [s['observations'] for s in batch],
-            'terminal:0': [s['terminal'] for s in batch]
-            # 'inputs:0': [s['observation'] for s in batch],
-            # 'inputs_next:0': [s['observation_next'] for s in batch]
+            # 'observations:0': [s['observations'] for s in batch],
+            'terminal:0': [s['terminal'] for s in batch],
+            'inputs:0': [s['images'] for s in batch],
+            'inputs_next:0': [s['images_next'] for s in batch]
         }
