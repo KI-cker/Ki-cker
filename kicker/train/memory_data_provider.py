@@ -45,6 +45,9 @@ class MemoryDataProvider:
 
         observations = [np.swapaxes(np.swapaxes(table_frames[k:k+6], 0, 2), 0, 1) for k in range(0, length - 7)]
 
+        for k in goals_received:
+            scores[k  + 5] = - 100
+
         return [{
             'action': [a + 1 for a in actions[k + 5]],
             'score': scores[k + 5],
@@ -57,7 +60,7 @@ class MemoryDataProvider:
         return random.sample(self.frames, sample)
 
     def build_decoder(self):
-        observations = tf.placeholder(tf.string, shape=[None], name='observations')
+        observations = tf.placeholder(tf.string, shape=[None], name='observations_conv')
         observations_img = tf.cast(tf.map_fn(lambda i: tf.image.decode_jpeg(i), observations, dtype=tf.uint8), tf.float32)
         observations_img.set_shape([None, self.width, self.height, 3])
 
@@ -67,5 +70,5 @@ class MemoryDataProvider:
         sess = K.get_session()
 
         return sess.run(self.observations_img, feed_dict={
-            'observations:0': images
+            'observations_conv:0': images
         })

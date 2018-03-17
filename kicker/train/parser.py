@@ -32,7 +32,7 @@ class Parser:
         actions = [a for a in data['actions']]
         scores = [s for s in data['ball_scores']]
 
-        return table_frames, positions, actions, scoress
+        return table_frames, positions, actions, scores
 
     def get_train_game_data(self, game):
         data = self.file[game]
