@@ -48,8 +48,24 @@ class MemoryDataProvider:
 
         observations = [np.swapaxes(np.swapaxes(table_frames[k:k+6], 0, 2), 0, 1) for k in range(0, length - 7)]
 
+        goal_data = []
+
         for k in goals_received:
             scores[k] = - 100
+
+            if k > 5:
+                images = observations[k - 5][:,:,:5]
+                for j in range(-10, -5):
+                    if k - j > 0:
+                        goal_data.append({
+                            'action': [a + 1 for a in actions[k - j]],
+                            'score': np.sum(scores[k-j+5:k+1]),
+                            'images': images,
+                            'images_next': observations[k - j][:,:,1:],
+                            'terminal': True
+                        })
+
+        print(len(goal_data))
 
         return [{
             'action': [a + 1 for a in actions[k + 5]],
@@ -57,7 +73,7 @@ class MemoryDataProvider:
             'images': observations[k][:,:,:5],
             'images_next': observations[k][:,:,1:],
             'terminal': k + 5 in goals_received
-        } for k in range(0, length - 7) if k + 5 in good_indices]
+        } for k in range(0, length - 7) if k + 5 in good_indices] + goal_data
 
     def get_batch(self, sample=32):
         return self.data.sample(sample)
