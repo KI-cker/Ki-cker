@@ -1,4 +1,3 @@
-import random
 import tensorflow as tf
 
 from keras import backend as K
@@ -8,7 +7,9 @@ import numpy as np
 
 import h5py
 import cv2
-import yaml
+
+from kicker.train import BinnedData
+
 
 class MemoryDataProvider:
     def __init__(self, filename='train/training_data.h5'):
@@ -17,11 +18,13 @@ class MemoryDataProvider:
         self.height = 480
         self.frames = []
 
+        self.data = BinnedData()
+
         self.observations_img = self.build_decoder()
 
     def load(self):
         for game_name in self.file:
-            self.frames = self.frames + self.get_train_game_data(game_name)
+            self.data.add_unseen_data(self.get_train_game_data(game_name))
             print('Done loading {}', game_name)
 
     def decode_image(self, raw):
@@ -57,7 +60,7 @@ class MemoryDataProvider:
         } for k in range(0, length - 7) if k + 5 in good_indices]
 
     def get_batch(self, sample=32):
-        return random.sample(self.frames, sample)
+        return self.data.sample(sample)
 
     def build_decoder(self):
         observations = tf.placeholder(tf.string, shape=[None], name='observations_conv')
@@ -72,3 +75,6 @@ class MemoryDataProvider:
         return sess.run(self.observations_img, feed_dict={
             'observations_conv:0': images
         })
+
+    def update(self, diff):
+        pass
