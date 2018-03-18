@@ -8,6 +8,11 @@ from kicker.train import DataProvider, MemoryDataProvider
 
 from kicker.train import Trainer
 from kicker.neural_net import NeuralNet
+
+import logging
+logging.basicConfig(filename='train.log', level=logging.DEBUG, format='%(asctime)s %(filename)s %(lineno)d %(levelname)s %(message)s')
+
+
 nn = NeuralNet()
 
 t = Trainer(nn)
@@ -30,9 +35,12 @@ memory.load()
 #     return number_bad, s + provider.get_batch(sample=32-number_bad)
 
 
-for j in range(5000):
+for j in range(10000):
     s = memory.get_batch()
     _, loss, diff, computed = t.train_step(s)
+    memory.update(diff)
+    if j % 100 == 0:
+        memory.data.log_statistics()
 
     print(datetime.utcnow(), j, 'Loss ', loss, ' diff ', np.mean(diff), ' computed moves ', np.sum(np.abs(computed - 1))/ 32 / 8, ' terminals ', np.sum([t['terminal'] for t in s]))
 

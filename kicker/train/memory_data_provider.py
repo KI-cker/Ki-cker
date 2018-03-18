@@ -77,4 +77,4 @@ class MemoryDataProvider:
         })
 
     def update(self, diff):
-        pass
+        self.data.update_with_deltas(np.max(diff, axis=1))
