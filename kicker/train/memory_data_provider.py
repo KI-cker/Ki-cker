@@ -40,7 +40,7 @@ class MemoryDataProvider:
         table_frames = [i[:,:,1] for i in images]
         positions = [p for p in data['ball_pos']]
         actions = [a for a in data['actions']]
-        scores = [0.1 * s for s in data['scores']]
+        scores = [0.01 * s for s in data['scores']]
         goals_received = [s for s in data['goals_received']]
         good_indices = [i for i in data['good_indices']]
 
