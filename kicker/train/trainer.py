@@ -56,6 +56,7 @@ class Trainer:
         computed = self.evaluate_input(inputs)
         computed_next = self.evaluate_input(inputs_next)
         computed_next_old = self.evaluate_input_old(inputs_next)
+        computed_actions = tf.stop_gradient(tf.argmax(computed, axis=2))
 
         actions_one_hot = tf.one_hot(actions, 3, axis=2)
 
@@ -66,6 +67,7 @@ class Trainer:
         q_new = tf.stop_gradient(rewards + tf.where(terminals, tf.zeros_like(second_term), second_term))
 
         loss = tf.losses.huber_loss(q_new, q_old)
+        loss = loss + 0.01 * tf.reduce_mean(tf.where(computed_actions == tf.ones_like(computed_actions), tf.zeros_like(q_new), tf.ones_like(q_new)))
         # loss = loss + 0.1 * tf.reduce_mean(tf.nn.relu(computed[:,:,0] - computed[:,:,1]))
         # loss = loss + 0.1 * tf.reduce_mean(tf.nn.relu(computed[:,:,2] - computed[:,:,1]))
 
