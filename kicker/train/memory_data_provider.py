@@ -58,10 +58,10 @@ class MemoryDataProvider:
                 for j in range(-10, -5):
                     if k - j > 0:
                         goal_data.append({
-                            'action': [a + 1 for a in actions[k - j]],
-                            'score': np.sum(scores[k-j+5:k+1]),
+                            'action': [a + 1 for a in actions[k + j]],
+                            'score': np.sum([0.99 ** l * scores[k + j + l] for l in range(0, abs(j))]),
                             'images': images,
-                            'images_next': observations[k - j][:,:,1:],
+                            'images_next': observations[k + j][:,:,1:],
                             'terminal': True
                         })
 
