@@ -1,3 +1,5 @@
+import random
+
 import tensorflow as tf
 
 from keras import backend as K
@@ -38,7 +40,6 @@ class MemoryDataProvider:
         images = self.decode([i for i in data['table_frames_encoded']])
 
         table_frames = [i[:,:,1] for i in images]
-        positions = [p for p in data['ball_pos']]
         actions = [a for a in data['actions']]
         scores = [0.01 * s for s in data['scores']]
         goals_received = [s for s in data['goals_received']]
@@ -46,34 +47,32 @@ class MemoryDataProvider:
 
         length = len(table_frames)
 
-        observations = [np.swapaxes(np.swapaxes(table_frames[k:k+6], 0, 2), 0, 1) for k in range(0, length - 7)]
-
-        goal_data = []
+        observations = [np.swapaxes(np.swapaxes(table_frames[k-4:k+1], 0, 2), 0, 1) for k in range(5, length)]
 
         for k in goals_received:
             scores[k] = - 100
 
-            if k > 5:
-                images = observations[k - 5][:,:,:5]
-                for j in range(-10, -5):
-                    if k - j > 0:
-                        goal_data.append({
-                            'action': [a + 1 for a in actions[k + j]],
-                            'score': np.sum([0.99 ** l * scores[k + j + l] for l in range(0, abs(j))]),
-                            'images': images,
-                            'images_next': observations[k + j][:,:,1:],
-                            'terminal': True
-                        })
+        data = []
+        for k in range(0, len(observations) - 5):
+            step = random.randint(1, 5)
+            terminal = False
+            for l in range(0, step):
+                if k + l in goals_received:
+                    step = l
+                    terminal = True
+                    break
 
-        print(len(goal_data))
+            score = np.sum([0.99 ** l * scores[k + l] for l in range(0, step)])
 
-        return [{
-            'action': [a + 1 for a in actions[k + 5]],
-            'score': scores[k + 5],
-            'images': observations[k][:,:,:5],
-            'images_next': observations[k][:,:,1:],
-            'terminal': k + 5 in goals_received
-        } for k in range(0, length - 7) if k + 5 in good_indices] + goal_data
+            data.append({
+                'action': [a + 1 for a in actions[k]],
+                'score': score,
+                'images': observations[k][:,:,:5],
+                'images_next': observations[k + step],
+                'terminal': terminal or k + step in goals_received
+            })
+
+        return data
 
     def get_batch(self, sample=32):
         return self.data.sample(sample)
