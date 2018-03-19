@@ -68,7 +68,7 @@ class Trainer:
 
         loss = tf.losses.huber_loss(q_new, q_old)
         # loss = loss + 0.01 * tf.reduce_mean(tf.where(computed_actions == tf.ones_like(computed_actions), tf.zeros_like(q_new), tf.ones_like(q_new)))
-        # loss = loss + 0.1 * tf.reduce_mean(tf.nn.relu(computed[:,:,0] - computed[:,:,1]))
+        # loss = loss + 0.1 * tf.reduce_mean(stf.nn.relu(computed[:,:,0] - computed[:,:,1]))
         # loss = loss + 0.1 * tf.reduce_mean(tf.nn.relu(computed[:,:,2] - computed[:,:,1]))
 
         train_step = tf.train.AdamOptimizer(1e-5).minimize(loss)

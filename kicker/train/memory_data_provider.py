@@ -62,7 +62,7 @@ class MemoryDataProvider:
                     terminal = True
                     break
 
-            score = np.sum([0.99 ** l * scores[k + l] for l in range(0, step)])
+            score = np.sum([0.99 ** l * scores[k + l] for l in range(0, step + 1)])
 
             data.append({
                 'action': [a + 1 for a in actions[k]],
