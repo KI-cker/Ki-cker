@@ -25,7 +25,7 @@ class MemoryDataProvider:
         self.observations_img = self.build_decoder()
 
     def load(self):
-        for game_name in self.file:
+        for game_name in random.sample([g for g in self.file], 400):
             self.data.add_unseen_data(self.get_train_game_data(game_name))
             print('Done loading {}', game_name)
 
