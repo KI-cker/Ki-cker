@@ -35,7 +35,7 @@ memory.load()
 #     return number_bad, s + provider.get_batch(sample=32-number_bad)
 
 
-for j in range(10000):
+for j in range(3000):
     s = memory.get_batch()
     _, loss, diff, computed = t.train_step(s)
     memory.update(diff)

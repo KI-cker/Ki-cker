@@ -25,7 +25,8 @@ class MemoryDataProvider:
         self.observations_img = self.build_decoder()
 
     def load(self):
-        for game_name in random.sample([g for g in self.file], 400):
+        games = [g for g in self.file]
+        for game_name in random.sample(games, min(200, len(games))):
             self.data.add_unseen_data(self.get_train_game_data(game_name))
             print('Done loading {}', game_name)
 
@@ -54,23 +55,24 @@ class MemoryDataProvider:
 
         data = []
         for k in range(0, len(observations) - 5):
-            step = random.randint(1, 5)
-            terminal = False
-            for l in range(0, step):
-                if k + l in goals_received:
-                    step = l
-                    terminal = True
-                    break
+            if k in good_indices:
+                step = random.randint(1, 5)
+                terminal = False
+                for l in range(0, step):
+                    if k + l in goals_received:
+                        step = l
+                        terminal = True
+                        break
 
-            score = np.sum([0.99 ** l * scores[k + l] for l in range(0, step)])
+                score = np.sum([0.99 ** l * scores[k + l] for l in range(0, step + 1)])
 
-            data.append({
-                'action': [a + 1 for a in actions[k]],
-                'score': score,
-                'images': observations[k][:,:,:5],
-                'images_next': observations[k + step],
-                'terminal': terminal or k + step in goals_received
-            })
+                data.append({
+                    'action': [a + 1 for a in actions[k]],
+                    'score': score,
+                    'images': observations[k],
+                    'images_next': observations[k + step],
+                    'terminal': terminal
+                })
 
         return data
 
