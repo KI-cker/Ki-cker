@@ -53,6 +53,7 @@ def worker(queue, video_queue, name, model, randomness):
     while queue.empty():
         logging.info('loop')
         if video.grab():
+            start_time = time.time()
             logging.info('video grab')
             start_time = time.time()
 
@@ -61,6 +62,7 @@ def worker(queue, video_queue, name, model, randomness):
             frame  = agent.new_frame(f)
             temp_inputs, prediction = agent.get_inputs()
 
+            time_neural_net = (time.time() - start_time) * 1000
             if temp_inputs is not None:
                 prediction = prediction[0].reshape(8,3)
                 img_enc = cv2.imencode('.jpg', np.swapaxes(frame, 0, 1))[1].tostring().encode('base64')
@@ -68,9 +70,14 @@ def worker(queue, video_queue, name, model, randomness):
                 sock.sendto(json.dumps(prediction.tolist()).encode(), ('localhost', 1881))
                 inputs = temp_inputs
                 motor.control(inputs)
+            time_control = (time.time() - start_time) * 1000 - time_neural_net
+
 
             storage_queue.put((f, inputs))
             # video_queue.put(f)
+            time_total = (time.time() - start_time) * 1000
+
+            sock.sendto(json.dumps([time_neural_net, time_control, time_total]).encode(), ('localhost', 1883))
 
 
     queue.get()
