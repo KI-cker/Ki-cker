@@ -38,6 +38,7 @@ class NeuralNetAgent(Agent):
         self.input = self.input[:,:,1:]
 
         res = self.neural_net.predict_single(self.input)
+        self.prediction = res
         self.inputs = convert_neural_net_result_to_actions(res)
 
         if random.random() < self.randomness:
@@ -45,3 +46,5 @@ class NeuralNetAgent(Agent):
 
         self.inputs_changed = True
         self.last_frame = first_frame
+
+        return frame

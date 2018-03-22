@@ -1,1 +1,1 @@
-ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="046d", ATTR{idProduct}=="085eA", RUN="/home/nvidia/Ki-cker/scripts/configure_video.sh"
+SUBSYSTEM=="video4linux", SUBSYSTEMS=="usb", ATTRS{idVendor}=="046d", ATTRS{idProduct}=="085e", PROGRAM="/home/nvidia/Ki-cker/scripts/configure_video.sh"

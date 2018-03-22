@@ -1,5 +1,8 @@
 import logging
 import time
+import json
+import numpy as np
+from datetime import datetime
 
 import cv2
 import yaml
@@ -12,6 +15,9 @@ def worker(queue, video_queue, name, model, randomness):
     import tensorflow as tf
     from kicker.agents.neural_net_agent import NeuralNetAgent
     import keras.backend.tensorflow_backend as KTF
+
+    import socket
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
     config = tf.ConfigProto()
     config.gpu_options.allow_growth = True
@@ -48,13 +54,18 @@ def worker(queue, video_queue, name, model, randomness):
         logging.info('loop')
         if video.grab():
             logging.info('video grab')
+            start_time = time.time()
 
             r, f = video.retrieve()
 
-            agent.new_frame(f)
-            temp_inputs = agent.get_inputs()
+            frame  = agent.new_frame(f)
+            temp_inputs, prediction = agent.get_inputs()
 
             if temp_inputs is not None:
+                prediction = prediction[0].reshape(8,3)
+                img_enc = cv2.imencode('.jpg', np.swapaxes(frame, 0, 1))[1].tostring().encode('base64')
+                sock.sendto(img_enc, ('localhost', 1882))
+                sock.sendto(json.dumps(prediction.tolist()).encode(), ('localhost', 1881))
                 inputs = temp_inputs
                 motor.control(inputs)
 
@@ -65,5 +76,5 @@ def worker(queue, video_queue, name, model, randomness):
     queue.get()
     storage_queue.put((None, None))
     storage_process.join()
-    motor.resetEmulation(False)
+    # motor.resetEmulation(False)
     motor.disconnect()
