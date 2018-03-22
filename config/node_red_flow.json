@@ -1,0 +1,1086 @@
+[
+    {
+        "disabled": false,
+        "id": "424b2849.8bc238",
+        "info": "",
+        "label": "Flow 1",
+        "type": "tab"
+    },
+    {
+        "icon": "dashboard",
+        "id": "afd4269.d2258d8",
+        "name": "Home",
+        "type": "ui_tab",
+        "z": ""
+    },
+    {
+        "collapse": false,
+        "disp": false,
+        "id": "f4cd1450.da9718",
+        "name": "Default",
+        "tab": "afd4269.d2258d8",
+        "type": "ui_group",
+        "width": "4",
+        "z": ""
+    },
+    {
+        "id": "e7e2e72b.9e23c8",
+        "site": {
+            "allowSwipe": "false",
+            "dateFormat": "DD/MM/YYYY",
+            "hideToolbar": "true",
+            "name": "Node-RED Dashboard",
+            "sizes": {
+                "cx": 6,
+                "cy": 6,
+                "gx": 4,
+                "gy": 4,
+                "px": 0,
+                "py": 0,
+                "sx": 440,
+                "sy": 200
+            }
+        },
+        "theme": {
+            "customTheme": {
+                "baseColor": "#4B7930",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
+                "default": "#4B7930",
+                "name": "Untitled Theme 1"
+            },
+            "darkTheme": {
+                "baseColor": "#097479",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
+                "default": "#097479",
+                "edited": true,
+                "reset": false
+            },
+            "lightTheme": {
+                "baseColor": "#0094CE",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
+                "default": "#0094CE",
+                "edited": true,
+                "reset": false
+            },
+            "name": "theme-dark",
+            "themeState": {
+                "base-color": {
+                    "default": "#097479",
+                    "edited": false,
+                    "value": "#097479"
+                },
+                "base-font": {
+                    "value": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif"
+                },
+                "group-backgroundColor": {
+                    "edited": false,
+                    "value": "#333333"
+                },
+                "group-borderColor": {
+                    "edited": false,
+                    "value": "#555555"
+                },
+                "group-textColor": {
+                    "edited": false,
+                    "value": "#0eb8c0"
+                },
+                "page-backgroundColor": {
+                    "edited": false,
+                    "value": "#111111"
+                },
+                "page-sidebar-backgroundColor": {
+                    "edited": false,
+                    "value": "#000000"
+                },
+                "page-titlebar-backgroundColor": {
+                    "edited": false,
+                    "value": "#097479"
+                },
+                "widget-backgroundColor": {
+                    "edited": false,
+                    "value": "#097479"
+                },
+                "widget-borderColor": {
+                    "edited": false,
+                    "value": "#333333"
+                },
+                "widget-textColor": {
+                    "edited": false,
+                    "value": "#eeeeee"
+                }
+            }
+        },
+        "type": "ui_base"
+    },
+    {
+        "datatype": "utf8",
+        "group": "",
+        "id": "e1d802fd.ee8de",
+        "iface": "",
+        "ipv": "udp4",
+        "multicast": "false",
+        "name": "",
+        "port": "1881",
+        "type": "udp in",
+        "wires": [
+            [
+                "f7c94661.5ac128"
+            ]
+        ],
+        "x": 320,
+        "y": 380,
+        "z": "424b2849.8bc238"
+    },
+    {
+        "func": "msg.payload = JSON.parse(msg.payload);\n\n\nreturn msg;",
+        "id": "8238d76a.fdef58",
+        "name": "",
+        "noerr": 0,
+        "outputs": 1,
+        "type": "function",
+        "wires": [
+            [
+                "f10957b.47fefa8",
+                "c39c610c.78924",
+                "7b70f988.f7bb98",
+                "85b0ac36.127",
+                "ea1902c4.fa406",
+                "8e9d9fa4.8ba96",
+                "d1345e8d.24e2a",
+                "3dbafdec.b17a92",
+                "d42111ee.a0627",
+                "711038ef.6e0db8",
+                "314ce0a5.89542",
+                "13e9622a.89170e",
+                "b660b26e.db66c",
+                "82d2b2ed.16966",
+                "fd9fc03e.ee389",
+                "eae899a0.999d88"
+            ]
+        ],
+        "x": 870,
+        "y": 680,
+        "z": "424b2849.8bc238"
+    },
+    {
+        "chartType": "line",
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "cutout": 0,
+        "dot": false,
+        "group": "f4cd1450.da9718",
+        "height": "1",
+        "id": "f173cce9.aff72",
+        "interpolate": "linear",
+        "label": "Goal",
+        "legend": "false",
+        "name": "",
+        "nodata": "",
+        "order": 3,
+        "removeOlder": "5",
+        "removeOlderPoints": "1000",
+        "removeOlderUnit": "1",
+        "type": "ui_chart",
+        "useOldStyle": false,
+        "useOneColor": false,
+        "width": "1",
+        "wires": [
+            [],
+            []
+        ],
+        "x": 1270,
+        "xformat": "HH:mm:ss",
+        "y": 520,
+        "ymax": "",
+        "ymin": "",
+        "z": "424b2849.8bc238"
+    },
+    {
+        "func": "msg.payload = Math.min.apply(null, msg.payload[0]);\nmsg.topic = 'radial';\nreturn msg;",
+        "id": "f10957b.47fefa8",
+        "name": "goal",
+        "noerr": 0,
+        "outputs": 1,
+        "type": "function",
+        "wires": [
+            [
+                "f173cce9.aff72"
+            ]
+        ],
+        "x": 1070,
+        "y": 480,
+        "z": "424b2849.8bc238"
+    },
+    {
+        "func": "msg.payload = Math.min.apply(this, msg.payload[1]);\nmsg.topic = 'lateral';\nreturn msg;",
+        "id": "c39c610c.78924",
+        "name": "goal",
+        "noerr": 0,
+        "outputs": 1,
+        "type": "function",
+        "wires": [
+            [
+                "f173cce9.aff72"
+            ]
+        ],
+        "x": 1070,
+        "y": 520,
+        "z": "424b2849.8bc238"
+    },
+    {
+        "chartType": "line",
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "cutout": 0,
+        "dot": false,
+        "group": "f4cd1450.da9718",
+        "height": "1",
+        "id": "6c43940.95d056c",
+        "interpolate": "linear",
+        "label": "Defense",
+        "legend": "false",
+        "name": "",
+        "nodata": "",
+        "order": 4,
+        "removeOlder": "5",
+        "removeOlderPoints": "1000",
+        "removeOlderUnit": "1",
+        "type": "ui_chart",
+        "useOldStyle": false,
+        "useOneColor": false,
+        "width": "1",
+        "wires": [
+            [],
+            []
+        ],
+        "x": 1280,
+        "xformat": "HH:mm:ss",
+        "y": 620,
+        "ymax": "",
+        "ymin": "",
+        "z": "424b2849.8bc238"
+    },
+    {
+        "func": "msg.payload = Math.min.apply(this, msg.payload[2]);\nmsg.topic = 'radial';\nreturn msg;",
+        "id": "7b70f988.f7bb98",
+        "name": "defense",
+        "noerr": 0,
+        "outputs": 1,
+        "type": "function",
+        "wires": [
+            [
+                "6c43940.95d056c"
+            ]
+        ],
+        "x": 1080,
+        "y": 580,
+        "z": "424b2849.8bc238"
+    },
+    {
+        "func": "msg.payload = Math.min.apply(this, msg.payload[3]);\nmsg.topic = 'lateral';\nreturn msg;",
+        "id": "85b0ac36.127",
+        "name": "defense",
+        "noerr": 0,
+        "outputs": 1,
+        "type": "function",
+        "wires": [
+            [
+                "6c43940.95d056c"
+            ]
+        ],
+        "x": 1080,
+        "y": 620,
+        "z": "424b2849.8bc238"
+    },
+    {
+        "chartType": "line",
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "cutout": 0,
+        "dot": false,
+        "group": "f4cd1450.da9718",
+        "height": "1",
+        "id": "64a257df.e0d7d8",
+        "interpolate": "linear",
+        "label": "Center",
+        "legend": "false",
+        "name": "",
+        "nodata": "",
+        "order": 5,
+        "removeOlder": "5",
+        "removeOlderPoints": "1000",
+        "removeOlderUnit": "1",
+        "type": "ui_chart",
+        "useOldStyle": false,
+        "useOneColor": false,
+        "width": "1",
+        "wires": [
+            [],
+            []
+        ],
+        "x": 1270,
+        "xformat": "HH:mm:ss",
+        "y": 720,
+        "ymax": "",
+        "ymin": "",
+        "z": "424b2849.8bc238"
+    },
+    {
+        "func": "msg.payload = Math.min.apply(this, msg.payload[4]);\nmsg.topic = 'radial';\nreturn msg;",
+        "id": "ea1902c4.fa406",
+        "name": "center",
+        "noerr": 0,
+        "outputs": 1,
+        "type": "function",
+        "wires": [
+            [
+                "64a257df.e0d7d8"
+            ]
+        ],
+        "x": 1070,
+        "y": 680,
+        "z": "424b2849.8bc238"
+    },
+    {
+        "func": "msg.payload = Math.min.apply(this, msg.payload[5]);\nmsg.topic = 'lateral';\nreturn msg;",
+        "id": "8e9d9fa4.8ba96",
+        "name": "center",
+        "noerr": 0,
+        "outputs": 1,
+        "type": "function",
+        "wires": [
+            [
+                "64a257df.e0d7d8"
+            ]
+        ],
+        "x": 1070,
+        "y": 720,
+        "z": "424b2849.8bc238"
+    },
+    {
+        "chartType": "line",
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "cutout": 0,
+        "dot": false,
+        "group": "f4cd1450.da9718",
+        "height": "1",
+        "id": "8df391d5.62781",
+        "interpolate": "linear",
+        "label": "Attack",
+        "legend": "false",
+        "name": "",
+        "nodata": "",
+        "order": 6,
+        "removeOlder": "5",
+        "removeOlderPoints": "1000",
+        "removeOlderUnit": "1",
+        "type": "ui_chart",
+        "useOldStyle": false,
+        "useOneColor": false,
+        "width": "1",
+        "wires": [
+            [],
+            []
+        ],
+        "x": 1270,
+        "xformat": "HH:mm:ss",
+        "y": 820,
+        "ymax": "",
+        "ymin": "",
+        "z": "424b2849.8bc238"
+    },
+    {
+        "func": "msg.payload = Math.min.apply(this, msg.payload[6]);\nmsg.topic = 'radial';\nreturn msg;",
+        "id": "d1345e8d.24e2a",
+        "name": "attack",
+        "noerr": 0,
+        "outputs": 1,
+        "type": "function",
+        "wires": [
+            [
+                "8df391d5.62781"
+            ]
+        ],
+        "x": 1070,
+        "y": 780,
+        "z": "424b2849.8bc238"
+    },
+    {
+        "func": "msg.payload = Math.min.apply(this, msg.payload[7]);\nmsg.topic = 'lateral';\nreturn msg;",
+        "id": "3dbafdec.b17a92",
+        "name": "attack",
+        "noerr": 0,
+        "outputs": 1,
+        "type": "function",
+        "wires": [
+            [
+                "8df391d5.62781"
+            ]
+        ],
+        "x": 1070,
+        "y": 820,
+        "z": "424b2849.8bc238"
+    },
+    {
+        "estimation": false,
+        "frequency": "sec",
+        "id": "f7c94661.5ac128",
+        "ignore": false,
+        "name": "",
+        "type": "msg-speed",
+        "wires": [
+            [
+                "938199fc.53fd78"
+            ],
+            [
+                "17947a50.3d0cf6"
+            ]
+        ],
+        "x": 510,
+        "y": 480,
+        "z": "424b2849.8bc238"
+    },
+    {
+        "datatype": "buffer",
+        "group": "",
+        "id": "defc67c.d5fb598",
+        "iface": "",
+        "ipv": "udp4",
+        "multicast": "false",
+        "name": "",
+        "port": "1882",
+        "type": "udp in",
+        "wires": [
+            [
+                "d91c1ff3.300dc"
+            ]
+        ],
+        "x": 620,
+        "y": 180,
+        "z": "424b2849.8bc238"
+    },
+    {
+        "func": "msg.payload = msg.payload.toString('ascii')\nreturn msg;",
+        "id": "b359b1b3.4f151",
+        "name": "",
+        "noerr": 0,
+        "outputs": 1,
+        "type": "function",
+        "wires": [
+            [
+                "d64740a3.8999a"
+            ]
+        ],
+        "x": 1150,
+        "y": 280,
+        "z": "424b2849.8bc238"
+    },
+    {
+        "format": "<img src=\"data:image/png;base64,{{ msg.payload }}\" style=\"max-width:100%; max-height:100%;\"/>",
+        "fwdInMessages": true,
+        "group": "f4cd1450.da9718",
+        "height": "2",
+        "id": "d64740a3.8999a",
+        "name": "",
+        "order": 1,
+        "storeOutMessages": true,
+        "templateScope": "local",
+        "type": "ui_template",
+        "width": "2",
+        "wires": [
+            []
+        ],
+        "x": 1300,
+        "y": 380,
+        "z": "424b2849.8bc238"
+    },
+    {
+        "drop": true,
+        "id": "17947a50.3d0cf6",
+        "name": "",
+        "nbRateUnits": "0.5",
+        "pauseType": "queue",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "rate": "1",
+        "rateUnits": "second",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "type": "delay",
+        "wires": [
+            [
+                "8238d76a.fdef58"
+            ]
+        ],
+        "x": 750,
+        "y": 460,
+        "z": "424b2849.8bc238"
+    },
+    {
+        "drop": true,
+        "id": "d91c1ff3.300dc",
+        "name": "",
+        "nbRateUnits": "0.5",
+        "pauseType": "queue",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "rate": "1",
+        "rateUnits": "second",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "type": "delay",
+        "wires": [
+            [
+                "b359b1b3.4f151"
+            ]
+        ],
+        "x": 810,
+        "y": 180,
+        "z": "424b2849.8bc238"
+    },
+    {
+        "chartType": "line",
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "cutout": 0,
+        "dot": false,
+        "group": "f4cd1450.da9718",
+        "height": "2",
+        "id": "938199fc.53fd78",
+        "interpolate": "linear",
+        "label": "Framerate",
+        "legend": "false",
+        "name": "",
+        "nodata": "",
+        "order": 2,
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "60",
+        "type": "ui_chart",
+        "useOldStyle": false,
+        "useOneColor": false,
+        "width": "2",
+        "wires": [
+            [],
+            []
+        ],
+        "x": 690,
+        "xformat": "HH:mm:ss",
+        "y": 340,
+        "ymax": "",
+        "ymin": "",
+        "z": "424b2849.8bc238"
+    },
+    {
+        "chartType": "horizontalBar",
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "cutout": 0,
+        "dot": false,
+        "group": "f4cd1450.da9718",
+        "height": "1",
+        "id": "a0b46d4e.e9ae7",
+        "interpolate": "linear",
+        "label": "Goal Radial",
+        "legend": "false",
+        "name": "",
+        "nodata": "",
+        "order": 7,
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "type": "ui_chart",
+        "useOldStyle": false,
+        "useOneColor": false,
+        "width": "1",
+        "wires": [
+            [],
+            []
+        ],
+        "x": 1270,
+        "xformat": "HH:mm:ss",
+        "y": 920,
+        "ymax": "",
+        "ymin": "",
+        "z": "424b2849.8bc238"
+    },
+    {
+        "func": "data= msg.payload[0];\nmin = Math.min.apply(this, data);\n\nmsg.payload = [{\n    series: ['x'],\n    data: [[data[0] - min ,data[1] - min, data[2] - min]],\n    \"labels\": [ \"backward\", \"null\", \"forward\" ]\n}];\nreturn msg;",
+        "id": "d42111ee.a0627",
+        "name": "goal radial",
+        "noerr": 0,
+        "outputs": 1,
+        "type": "function",
+        "wires": [
+            [
+                "a0b46d4e.e9ae7"
+            ]
+        ],
+        "x": 1080,
+        "y": 920,
+        "z": "424b2849.8bc238"
+    },
+    {
+        "chartType": "horizontalBar",
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "cutout": 0,
+        "dot": false,
+        "group": "f4cd1450.da9718",
+        "height": "1",
+        "id": "b3fef79a.58e9e8",
+        "interpolate": "linear",
+        "label": "Goal Lateral",
+        "legend": "false",
+        "name": "",
+        "nodata": "",
+        "order": 11,
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "type": "ui_chart",
+        "useOldStyle": false,
+        "useOneColor": false,
+        "width": "1",
+        "wires": [
+            [],
+            []
+        ],
+        "x": 1270,
+        "xformat": "HH:mm:ss",
+        "y": 980,
+        "ymax": "",
+        "ymin": "",
+        "z": "424b2849.8bc238"
+    },
+    {
+        "func": "data= msg.payload[1];\nmin = Math.min.apply(this, data);\n\nmsg.payload = [{\n    series: ['x'],\n    data: [[data[0] - min ,data[1] - min, data[2] - min]],\n    \"labels\": [ \"backward\", \"null\", \"forward\" ]\n}];\nreturn msg;",
+        "id": "711038ef.6e0db8",
+        "name": "goal lateral",
+        "noerr": 0,
+        "outputs": 1,
+        "type": "function",
+        "wires": [
+            [
+                "b3fef79a.58e9e8"
+            ]
+        ],
+        "x": 1080,
+        "y": 980,
+        "z": "424b2849.8bc238"
+    },
+    {
+        "chartType": "horizontalBar",
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "cutout": 0,
+        "dot": false,
+        "group": "f4cd1450.da9718",
+        "height": "1",
+        "id": "5070d29c.3e385c",
+        "interpolate": "linear",
+        "label": "Defense Radial",
+        "legend": "false",
+        "name": "",
+        "nodata": "",
+        "order": 8,
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "type": "ui_chart",
+        "useOldStyle": false,
+        "useOneColor": false,
+        "width": "1",
+        "wires": [
+            [],
+            []
+        ],
+        "x": 1280,
+        "xformat": "HH:mm:ss",
+        "y": 1040,
+        "ymax": "",
+        "ymin": "",
+        "z": "424b2849.8bc238"
+    },
+    {
+        "func": "data= msg.payload[2];\nmin = Math.min.apply(this, data);\n\nmsg.payload = [{\n    series: ['x'],\n    data: [[data[0] - min ,data[1] - min, data[2] - min]],\n    \"labels\": [ \"backward\", \"null\", \"forward\" ]\n}];\nreturn msg;",
+        "id": "314ce0a5.89542",
+        "name": "defense radial",
+        "noerr": 0,
+        "outputs": 1,
+        "type": "function",
+        "wires": [
+            [
+                "5070d29c.3e385c"
+            ]
+        ],
+        "x": 1090,
+        "y": 1040,
+        "z": "424b2849.8bc238"
+    },
+    {
+        "chartType": "horizontalBar",
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "cutout": 0,
+        "dot": false,
+        "group": "f4cd1450.da9718",
+        "height": "1",
+        "id": "9428f24a.2d8ff",
+        "interpolate": "linear",
+        "label": "Defense Lateral",
+        "legend": "false",
+        "name": "",
+        "nodata": "",
+        "order": 12,
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "type": "ui_chart",
+        "useOldStyle": false,
+        "useOneColor": false,
+        "width": "1",
+        "wires": [
+            [],
+            []
+        ],
+        "x": 1280,
+        "xformat": "HH:mm:ss",
+        "y": 1100,
+        "ymax": "",
+        "ymin": "",
+        "z": "424b2849.8bc238"
+    },
+    {
+        "func": "data= msg.payload[3];\nmin = Math.min.apply(this, data);\n\nmsg.payload = [{\n    series: ['x'],\n    data: [[data[0] - min ,data[1] - min, data[2] - min]],\n    \"labels\": [ \"backward\", \"null\", \"forward\" ]\n}];\nreturn msg;",
+        "id": "13e9622a.89170e",
+        "name": "defense lateral",
+        "noerr": 0,
+        "outputs": 1,
+        "type": "function",
+        "wires": [
+            [
+                "9428f24a.2d8ff"
+            ]
+        ],
+        "x": 1090,
+        "y": 1100,
+        "z": "424b2849.8bc238"
+    },
+    {
+        "chartType": "horizontalBar",
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "cutout": 0,
+        "dot": false,
+        "group": "f4cd1450.da9718",
+        "height": "1",
+        "id": "17ca8336.e7b78d",
+        "interpolate": "linear",
+        "label": "Center Radial",
+        "legend": "false",
+        "name": "",
+        "nodata": "",
+        "order": 9,
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "type": "ui_chart",
+        "useOldStyle": false,
+        "useOneColor": false,
+        "width": "1",
+        "wires": [
+            [],
+            []
+        ],
+        "x": 1280,
+        "xformat": "HH:mm:ss",
+        "y": 1160,
+        "ymax": "",
+        "ymin": "",
+        "z": "424b2849.8bc238"
+    },
+    {
+        "func": "data= msg.payload[4];\nmin = Math.min.apply(this, data);\n\nmsg.payload = [{\n    series: ['x'],\n    data: [[data[0] - min ,data[1] - min, data[2] - min]],\n    \"labels\": [ \"backward\", \"null\", \"forward\" ]\n}];\nreturn msg;",
+        "id": "b660b26e.db66c",
+        "name": "center radial",
+        "noerr": 0,
+        "outputs": 1,
+        "type": "function",
+        "wires": [
+            [
+                "17ca8336.e7b78d"
+            ]
+        ],
+        "x": 1080,
+        "y": 1160,
+        "z": "424b2849.8bc238"
+    },
+    {
+        "chartType": "horizontalBar",
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "cutout": 0,
+        "dot": false,
+        "group": "f4cd1450.da9718",
+        "height": "1",
+        "id": "4a2f55a2.5ab8fc",
+        "interpolate": "linear",
+        "label": "Center Lateral",
+        "legend": "false",
+        "name": "",
+        "nodata": "",
+        "order": 13,
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "type": "ui_chart",
+        "useOldStyle": false,
+        "useOneColor": false,
+        "width": "1",
+        "wires": [
+            [],
+            []
+        ],
+        "x": 1280,
+        "xformat": "HH:mm:ss",
+        "y": 1220,
+        "ymax": "",
+        "ymin": "",
+        "z": "424b2849.8bc238"
+    },
+    {
+        "func": "data= msg.payload[5];\nmin = Math.min.apply(this, data);\n\nmsg.payload = [{\n    series: ['x'],\n    data: [[data[0] - min ,data[1] - min, data[2] - min]],\n    \"labels\": [ \"backward\", \"null\", \"forward\" ]\n}];\nreturn msg;",
+        "id": "82d2b2ed.16966",
+        "name": "centeral lateral",
+        "noerr": 0,
+        "outputs": 1,
+        "type": "function",
+        "wires": [
+            [
+                "4a2f55a2.5ab8fc"
+            ]
+        ],
+        "x": 1090,
+        "y": 1220,
+        "z": "424b2849.8bc238"
+    },
+    {
+        "chartType": "horizontalBar",
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "cutout": 0,
+        "dot": false,
+        "group": "f4cd1450.da9718",
+        "height": "1",
+        "id": "61d557a2.9fb098",
+        "interpolate": "linear",
+        "label": "Offense Radial",
+        "legend": "false",
+        "name": "",
+        "nodata": "",
+        "order": 10,
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "type": "ui_chart",
+        "useOldStyle": false,
+        "useOneColor": false,
+        "width": "1",
+        "wires": [
+            [],
+            []
+        ],
+        "x": 1280,
+        "xformat": "HH:mm:ss",
+        "y": 1280,
+        "ymax": "",
+        "ymin": "",
+        "z": "424b2849.8bc238"
+    },
+    {
+        "func": "data= msg.payload[6];\nmin = Math.min.apply(this, data);\n\nmsg.payload = [{\n    series: ['x'],\n    data: [[data[0] - min ,data[1] - min, data[2] - min]],\n    \"labels\": [ \"backward\", \"null\", \"forward\" ]\n}];\nreturn msg;",
+        "id": "fd9fc03e.ee389",
+        "name": "offense radial",
+        "noerr": 0,
+        "outputs": 1,
+        "type": "function",
+        "wires": [
+            [
+                "61d557a2.9fb098"
+            ]
+        ],
+        "x": 1090,
+        "y": 1280,
+        "z": "424b2849.8bc238"
+    },
+    {
+        "chartType": "horizontalBar",
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "cutout": 0,
+        "dot": false,
+        "group": "f4cd1450.da9718",
+        "height": "1",
+        "id": "980d0fff.8521e",
+        "interpolate": "linear",
+        "label": "Offense Lateral",
+        "legend": "false",
+        "name": "",
+        "nodata": "",
+        "order": 14,
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "type": "ui_chart",
+        "useOldStyle": false,
+        "useOneColor": false,
+        "width": "1",
+        "wires": [
+            [],
+            []
+        ],
+        "x": 1280,
+        "xformat": "HH:mm:ss",
+        "y": 1340,
+        "ymax": "",
+        "ymin": "",
+        "z": "424b2849.8bc238"
+    },
+    {
+        "func": "data= msg.payload[7];\nmin = Math.min.apply(this, data);\n\nmsg.payload = [{\n    series: ['x'],\n    data: [[data[0] - min ,data[1] - min, data[2] - min]],\n    \"labels\": [ \"backward\", \"null\", \"forward\" ]\n}];\nreturn msg;",
+        "id": "eae899a0.999d88",
+        "name": "offense lateral",
+        "noerr": 0,
+        "outputs": 1,
+        "type": "function",
+        "wires": [
+            [
+                "980d0fff.8521e"
+            ]
+        ],
+        "x": 1090,
+        "y": 1340,
+        "z": "424b2849.8bc238"
+    }
+]
