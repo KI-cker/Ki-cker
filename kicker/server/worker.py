@@ -8,7 +8,7 @@ import cv2
 import yaml
 from multiprocessing import Queue, Process
 
-from kicker.opcua_motor import MotorController
+from kicker.opcua_motor import motor_worker
 from kicker.storage import storage_worker
 
 def worker(queue, video_queue, name, model, randomness):
@@ -29,11 +29,6 @@ def worker(queue, video_queue, name, model, randomness):
     agent = NeuralNetAgent(randomness=randomness, neural_net_filename=model)
 
     logging.info('started neural net')
-    motor = MotorController()
-
-    motor.resetEmulation()
-
-    logging.info('started motor')
 
     video = cv2.VideoCapture(1)
 
@@ -47,6 +42,12 @@ def worker(queue, video_queue, name, model, randomness):
     storage_process.start()
 
     logging.info('started queue')
+
+    motor_queue = Queue()
+    motor_process = Process(target=motor_worker, args=(motor_queue,))
+    motor_process.start()
+
+    logging.info('started control')
 
     inputs = [0,] * 8
 
@@ -67,7 +68,7 @@ def worker(queue, video_queue, name, model, randomness):
                 sock.sendto(img_enc, ('localhost', 1882))
                 sock.sendto(json.dumps(prediction.tolist()).encode(), ('localhost', 1881))
                 inputs = temp_inputs
-                motor.control(inputs)
+                motor_queue.put(inputs)
 
             storage_queue.put((f, inputs))
             # video_queue.put(f)
@@ -76,5 +77,6 @@ def worker(queue, video_queue, name, model, randomness):
     queue.get()
     storage_queue.put((None, None))
     storage_process.join()
+    motor_queue.put(None)
+    motor_process.join()
     # motor.resetEmulation(False)
-    motor.disconnect()
