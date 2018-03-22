@@ -4,6 +4,21 @@ from kicker.opcua.opcua_controller import OpcuaController
 
 logging.basicConfig(filename='opcua.log', level=logging.ERROR, format='%(asctime)s %(filename)s %(lineno)d %(levelname)s %(message)s')
 
+def motor_worker(queue):
+    motor = MotorController()
+    motor.resetEmulation()
+
+    while True:
+        command = queue.get()
+
+        if command is None:
+            break
+
+        if queue.empty():
+            motor.control(command)
+
+    motor.disconnect()
+
 
 class MotorController(OpcuaController):
     def __init__(self):
