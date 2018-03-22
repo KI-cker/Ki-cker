@@ -9,13 +9,19 @@ class OpcuaBase(object):
         self.address = address
         self.client = Client(self.address)
 
+        self.nodes = {}
+
+    def get_node(self, nodeId):
+        if not nodeId in self.nodes:
+            self.nodes[nodeId] = self.client.get_node(ua.NodeId(nodeId, 2))
+        return self.nodes[nodeId]
+
     def readValue_polling(self, nodeId, namespace):
         var = self.client.get_node(ua.NodeId(nodeId, namespace))
         return var.get_value()
 
     def writeBooleanValue(self, nodeId, namespace, value):
-        var = self.client.get_node(ua.NodeId(nodeId, namespace))
-        var.set_value(ua.Variant(value, ua.VariantType.Boolean))
+        self.get_node(nodeId).set_value(ua.Variant(value, ua.VariantType.Boolean))
 
     def writeFloatValue(self, nodeId, namespace, value):
         var = self.client.get_node(ua.NodeId(nodeId, namespace))
