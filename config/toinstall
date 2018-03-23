@@ -1,0 +1,7 @@
+sudo apt install -y ipython git python-pip htop guvcview v4l-utils libjpeg-dev tree libxml2-dev libxslt1-dev libhdf5-dev hdf5-tools libhdf5-cpp-11 python-pygame libblas-dev liblapack-dev libatlas-base-dev gfortran npm libfreetype6-dev pkg-config libpng12-dev libapache2-mod-wsgi apach2 openvpn swig
+
+sudo npm install -g node-red pm2 node-red-dashboard node-red-contrib-msg-speed node-red-node-base64 btoa
+
+pip install numpy jupyter pillow flask PyYAML opcua h5py keras matplotlib seaborn
+
+sudo apt-get -y purge apport
