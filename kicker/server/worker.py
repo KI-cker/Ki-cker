@@ -53,6 +53,10 @@ def worker(queue, video_queue, name, model, randomness):
 
     inputs = [0,] * 8
 
+    import socket
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+
+
     while queue.empty():
         logging.info('loop')
         if video.grab():
