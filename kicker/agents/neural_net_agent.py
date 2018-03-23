@@ -28,7 +28,7 @@ class NeuralNetAgent(Agent):
 
     def new_frame(self, frame):
         frame_color = self.analyzer.extract_table(frame, (320, 480))
-	frame = frame_color[:, :, 1]
+        frame = frame_color[:, :, 1]
         first_frame = np.swapaxes(frame, 0, 1).reshape(320, 480, 1)
         if self.input is None:
             self.input = first_frame
@@ -46,6 +46,5 @@ class NeuralNetAgent(Agent):
             self.inputs = [random.randint(0, 2) - 1 for k in range(0, 8)]
 
         self.inputs_changed = True
-        self.last_frame = first_frame
 
         return frame_color
