@@ -103,7 +103,7 @@ def monitoring_worker(queue):
             break
         if queue.empty():
             prediction = data[1].reshape(8, 3)
-            img_enc = cv2.imencode('.jpg', np.swapaxes(data[0], 0, 1))[1].tostring().encode('base64')
+            img_enc = cv2.imencode('.jpg', np.swapaxes(data[0], 0, 1)[::-1,:,:])[1].tostring().encode('base64')
             sock.sendto(img_enc, ('localhost', 1882))
             sock.sendto(json.dumps(prediction.tolist()).encode(), ('localhost', 1881))
 
