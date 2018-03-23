@@ -90,7 +90,7 @@ def worker(queue, video_queue, name, model, randomness):
     motor_queue.put(None)
     motor_process.join()
     monitoring_queue.put(None)
-    monitoring_queue.join()
+    monitoring_process.join()
     # motor.resetEmulation(False)
 
 def monitoring_worker(queue):
