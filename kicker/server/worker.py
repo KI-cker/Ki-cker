@@ -16,9 +16,6 @@ def worker(queue, video_queue, name, model, randomness):
     from kicker.agents.neural_net_agent import NeuralNetAgent
     import keras.backend.tensorflow_backend as KTF
 
-    import socket
-    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-
     config = tf.ConfigProto()
     config.gpu_options.allow_growth = True
     sess = tf.Session(config=config)
@@ -47,6 +44,11 @@ def worker(queue, video_queue, name, model, randomness):
     motor_process = Process(target=motor_worker, args=(motor_queue,))
     motor_process.start()
 
+
+    monitoring_queue = Queue()
+    monitoring_process = Process(target=monitoring_worker, args=(monitoring_queue,))
+    monitoring_process.start()
+
     logging.info('started control')
 
     inputs = [0,] * 8
@@ -65,13 +67,10 @@ def worker(queue, video_queue, name, model, randomness):
 
             time_neural_net = (time.time() - start_time) * 1000
             if temp_inputs is not None:
-                prediction = prediction[0].reshape(8,3)
-                img_enc = cv2.imencode('.jpg', np.swapaxes(frame, 0, 1))[1].tostring().encode('base64')
-                sock.sendto(img_enc, ('localhost', 1882))
-                sock.sendto(json.dumps(prediction.tolist()).encode(), ('localhost', 1881))
                 inputs = temp_inputs
 
                 motor_queue.put(inputs)
+                monitoring_queue.put([frame, prediction])
             time_control = (time.time() - start_time) * 1000 - time_neural_net
 
             storage_queue.put((f, inputs))
@@ -86,4 +85,21 @@ def worker(queue, video_queue, name, model, randomness):
     storage_process.join()
     motor_queue.put(None)
     motor_process.join()
+    monitoring_queue.put(None)
+    monitoring_queue.join()
     # motor.resetEmulation(False)
+
+def monitoring_worker(queue):
+    import socket
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+
+    while True:
+        data = queue.get()
+        if data is None:
+            break
+        if queue.empty():
+            prediction = data[1].reshape(8, 3)
+            img_enc = cv2.imencode('.jpg', np.swapaxes(data[0], 0, 1))[1].tostring().encode('base64')
+            sock.sendto(img_enc, ('localhost', 1882))
+            sock.sendto(json.dumps(prediction.tolist()).encode(), ('localhost', 1881))
+
