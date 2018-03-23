@@ -34,8 +34,7 @@ div {
     <body>
         <h1>New game</h1>
         <form method="POST" action="start">
-        <label for="name">Name</label>
-        <input id="name" name="name" type="text"/><br/>
+        <input id="name" name="name" type="hidden" value="hidden"/><br/>
         <label for="model">Model</label>
         <select name="model" id="model">
             {% for model in models %}
