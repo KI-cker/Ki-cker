@@ -38,7 +38,7 @@ def worker(queue, video_queue, name, model, randomness):
 
     storage_queue = Queue()
     filename = '{}_{}.h5'.format(name, time.strftime('%Y%m%d_%H%M%S'))
-    storage_process = Process(target=storage_worker, args=(storage_queue, yaml_config, filename))
+    storage_process = Process(target=storage_worker, args=(storage_queue, yaml_config, 'games_tmp/' + filename))
     storage_process.start()
 
     logging.info('started queue')
@@ -91,7 +91,7 @@ def worker(queue, video_queue, name, model, randomness):
     storage_queue.put((None, None))
     storage_process.join()
 
-    os.rename(filename, 'games/' + filename)
+    os.rename('games_tmp/' + filename, 'games/' + filename)
     subprocess.Popen('scripts/sync_games.sh', stderr=subprocess.PIPE, stdout=subprocess.PIPE)
 
     motor_queue.put(None)
