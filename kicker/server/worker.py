@@ -3,6 +3,7 @@ import time
 import json
 import numpy as np
 from datetime import datetime
+import os
 
 import cv2
 import yaml
@@ -35,7 +36,8 @@ def worker(queue, video_queue, name, model, randomness):
         yaml_config = yaml.load(f)
 
     storage_queue = Queue()
-    storage_process = Process(target=storage_worker, args=(storage_queue, yaml_config, 'games/{}_{}.h5'.format(name, time.strftime('%Y%m%d_%H%M%S'))))
+    filename = '{}_{}.h5'.format(name, time.strftime('%Y%m%d_%H%M%S'))
+    storage_process = Process(target=storage_worker, args=(storage_queue, yaml_config, filename))
     storage_process.start()
 
     logging.info('started queue')
@@ -87,6 +89,9 @@ def worker(queue, video_queue, name, model, randomness):
     queue.get()
     storage_queue.put((None, None))
     storage_process.join()
+
+    os.rename(filename, 'games/' + filename)
+
     motor_queue.put(None)
     motor_process.join()
     monitoring_queue.put(None)
