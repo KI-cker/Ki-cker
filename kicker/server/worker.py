@@ -5,6 +5,7 @@ import numpy as np
 from datetime import datetime
 import os
 import subprocess
+import shutil
 
 import cv2
 import yaml
@@ -91,7 +92,7 @@ def worker(queue, video_queue, name, model, randomness):
     storage_queue.put((None, None))
     storage_process.join()
 
-    os.rename('games_tmp/' + filename, 'games/' + filename)
+    shutil.move('games_tmp/' + filename, 'games/' + filename)
     subprocess.Popen('scripts/sync_games.sh', stderr=subprocess.PIPE, stdout=subprocess.PIPE)
 
     motor_queue.put(None)
