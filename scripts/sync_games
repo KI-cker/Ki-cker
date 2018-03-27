@@ -1,8 +1,17 @@
 #!/usr/bin/env bash
 
-set +e
-
-rsync -rv --progress games/ kicker-data:/home/ki-cker/data/games
-
-mkdir -p games_transferred
-mv games/*.h5 games_transferred
+if [ ! -e 'sync.pid' ]; then
+  set +e
+  touch 'sync.pid';
+  ((
+  set -e
+  
+  ping -c 1 -W 5 10.0.42.7 || (echo "Server unreachable" && exit 1)
+  
+  rsync -rv --progress games/ kicker-data:/home/ki-cker/data/games
+  
+  mkdir -p games_transferred
+  mv games/*.h5 games_transferred
+  ) 2>&1) | tee -a sync.log
+  rm 'sync.pid';
+fi
