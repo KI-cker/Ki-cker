@@ -22,7 +22,7 @@ app = Flask('__name__', static_url_path='/assets', static_folder='templates/asse
 def index():
     global process
     if not process:
-        models = glob('models/*.h5')
+        models = glob('models/model_*.h5')
         models.sort()
         models.reverse()
         return render_template('start.html', models=models)

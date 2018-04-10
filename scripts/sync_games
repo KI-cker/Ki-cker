@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+cd /home/nvidia/Ki-cker/
+
+echo "starting" >> sync.log
+
 if [ ! -e 'sync.pid' ]; then
   set +e
   touch 'sync.pid';
@@ -8,7 +12,7 @@ if [ ! -e 'sync.pid' ]; then
   
   ping -c 1 -W 5 10.0.42.7 || (echo "Server unreachable" && exit 1)
   
-  rsync -rv --progress games/ kicker-data:/home/ki-cker/data/games
+  rsync -rv  --partial --progress games/ kicker-data:/home/ki-cker/data/games
   
   mkdir -p games_transferred
   mv games/*.h5 games_transferred

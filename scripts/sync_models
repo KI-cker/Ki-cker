@@ -1,3 +1,18 @@
 #!/usr/bin/env bash
 
-rsync -av --progress kicker-data:/home/ki-cker/data/models/ models/
+cd /home/nvidia/Ki-cker/
+
+echo "starting" >> sync_models.log
+
+if [ ! -e 'sync.pid' ]; then
+  set +e
+  touch 'sync_models.pid';
+  ((
+  set -e
+  
+  ping -c 1 -W 5 10.0.42.7 || (echo "Server unreachable" && exit 1)
+  
+  rsync -av --progress kicker-data:/home/ki-cker/data/models/ models/
+  ) 2>&1) | tee -a sync_models.log
+  rm 'sync_models.pid';
+fi

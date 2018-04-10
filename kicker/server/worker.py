@@ -87,13 +87,18 @@ def worker(queue, video_queue, name, model, randomness):
 
             sock.sendto(json.dumps([time_neural_net, time_control, time_total]).encode(), ('localhost', 1883))
 
+    video.release()
 
     queue.get()
     storage_queue.put((None, None))
     storage_process.join()
 
+    print('mobing')
+
     shutil.move('games_tmp/' + filename, 'games/' + filename)
-    subprocess.Popen('scripts/sync_games.sh', stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+    print('syncing')
+    # p = subprocess.Popen('scripts/sync_games', stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+    # print('done')
 
     motor_queue.put(None)
     motor_process.join()
