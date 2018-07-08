@@ -16,11 +16,13 @@ class Trainer:
         self.height = shape[1]
         self.frame_count = frame_count
 
+
+        self.writer = tf.summary.FileWriter(logdir='logs', graph=K.get_session().graph)
+        self.writer.flush()
+
         self.observations_img = self.build_image_processor()
         self.tf_train_step = self.build_train_step()
 
-        # writer = tf.summary.FileWriter(logdir='logs', graph=K.get_session.get_graph())
-        # writer.flush()
 
 
     def build_image_processor(self):
@@ -71,9 +73,16 @@ class Trainer:
         # loss = loss + 0.1 * tf.reduce_mean(stf.nn.relu(computed[:,:,0] - computed[:,:,1]))
         # loss = loss + 0.1 * tf.reduce_mean(tf.nn.relu(computed[:,:,2] - computed[:,:,1]))
 
-        train_step = tf.train.AdamOptimizer(1e-5).minimize(loss)
+        with tf.name_scope('train'):
+            train_step = tf.train.AdamOptimizer(1e-5).minimize(loss)
 
-        return train_step, loss, tf.abs(q_new - q_old), tf.argmax(computed, axis=2)
+        tf.summary.scalar('loss', loss)
+        tf.summary.scalar('diff', tf.reduce_mean(tf.abs(q_new - q_old)))
+
+        merged = tf.summary.merge_all()
+
+
+        return train_step, loss, tf.abs(q_new - q_old), tf.argmax(computed, axis=2), merged
 
     def convert_images(self, inputs):
         return tf.transpose(tf.map_fn(lambda i: tf.image.decode_jpeg(i), inputs, dtype=tf.uint8)[:,:,:,0], [1,2,0])

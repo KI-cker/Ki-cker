@@ -6,6 +6,8 @@ from datetime import datetime
 from kicker.train import DataProvider, MemoryDataProvider
 # d = DataProvider()
 
+import tensorflow as tf
+
 from kicker.train import Trainer
 from kicker.neural_net import NeuralNet
 
@@ -37,7 +39,10 @@ memory.load()
 
 for j in range(3000):
     s = memory.get_batch()
-    _, loss, diff, computed = t.train_step(s)
+    _, loss, diff, computed, merged = t.train_step(s)
+    t.writer.add_summary(merged, j)
+    t.writer.add_run_metadata(tf.RunMetadata(), "step%d" % j)
+    t.writer.flush()
     memory.update(diff)
     if j % 100 == 0:
         memory.data.log_statistics()
