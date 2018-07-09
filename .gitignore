@@ -7,3 +7,4 @@
 *.pb
 *.ipynb
 
+tensorboard_logdir

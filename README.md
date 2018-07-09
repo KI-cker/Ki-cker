@@ -56,3 +56,10 @@ The tool
 python tools/view_game_file.py
 ```
 shows a specific game. Useful for inspecting the progress of neural net training.
+
+## Tensorboard
+After training via `python tools/train_1000.py`, one can use tensorboard to visualize
+the training via
+```
+tensorboard --logdir=tensorboard_logdir
+```

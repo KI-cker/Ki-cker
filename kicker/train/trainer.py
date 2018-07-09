@@ -21,7 +21,7 @@ class Trainer:
         self.options = tf.RunOptions(trace_level=tf.RunOptions.FULL_TRACE)
         self.run_metadata = tf.RunMetadata()
 
-        self.writer = tf.summary.FileWriter(logdir='logs', graph=K.get_session().graph)
+        self.writer = tf.summary.FileWriter(logdir='tensorboard_logdir', graph=K.get_session().graph)
         self.writer.flush()
 
         self.observations_img = self.build_image_processor()
