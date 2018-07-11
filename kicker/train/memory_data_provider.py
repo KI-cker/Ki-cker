@@ -26,7 +26,8 @@ class MemoryDataProvider:
 
     def load(self):
         games = [g for g in self.file]
-        for game_name in random.sample(games, min(200, len(games))):
+        for game_name in random.sample(games, 5):
+        # min(200, len(games))):
             self.data.add_unseen_data(self.get_train_game_data(game_name))
             print('Done loading {}', game_name)
 
@@ -76,6 +77,10 @@ class MemoryDataProvider:
 
         return data
 
+    def generator(self):
+        for d in self.data.unseen_data:
+            yield(d['action'], d['terminal'], [d['score'],]*8, d['images'], d['images_next'])
+
     def get_batch(self, sample=32):
         return self.data.sample(sample)
 
@@ -95,3 +100,14 @@ class MemoryDataProvider:
 
     def update(self, diff):
         self.data.update_with_deltas(np.max(diff, axis=1))
+
+    def get_as_dataset(self):
+        def get_slice_for_key(key, type=np.float32):
+            return np.array([d[key] for d in self.data.unseen_data], dtype=type)
+
+        return tf.data.Dataset.from_tensor_slices((
+            get_slice_for_key('action', np.uint8),
+            get_slice_for_key('images'),
+            get_slice_for_key('images_next'),
+            np.array([[d['score'], ] * 8 for d in self.data.unseen_data], dtype=np.float32),
+            get_slice_for_key('terminal', np.bool)))

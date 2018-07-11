@@ -7,6 +7,9 @@ from kicker.train import DataProvider, MemoryDataProvider
 # d = DataProvider()
 
 import tensorflow as tf
+import keras.backend as K
+from tensorflow.python.client import timeline
+
 
 from kicker.train import Trainer
 from kicker.neural_net import NeuralNet
@@ -22,32 +25,29 @@ t = Trainer(nn)
 memory = MemoryDataProvider()
 memory.load()
 
-
-# memory = []
-
-
-# def build_batch(provider, memory):
-#     number_bad = min(int(len(memory) / 100), 0)
-#     s = []
-#     for _ in range(number_bad):
-#         index = random.randint(0, len(memory) - 1)
-#         s.append(memory[index])
-#         del memory[index]
-#
-#     return number_bad, s + provider.get_batch(sample=32-number_bad)
+dataset = memory.get_as_dataset()
+next_item = dataset.repeat().batch(32).prefetch(1).make_one_shot_iterator().get_next()
 
 
-for j in range(3000):
-    s = memory.get_batch()
-    _, loss, diff, computed, merged = t.train_step(s)
-    t.writer.add_summary(merged, j)
-    t.writer.add_run_metadata(tf.RunMetadata(), "step%d" % j)
+sess = K.get_session()
+
+a, i, i_n, s, ter = next_item
+step, loss, diff, computed, merged = t.compute(a, i, i_n, s, ter)
+
+sess.run(tf.initialize_all_variables())
+
+for j in range(100):
+    _, c_loss, c_diff, c_computed, c_merged = sess.run([step, loss, diff, computed, merged])
+    print(datetime.utcnow(), j, 'Loss ', c_loss, ' diff ', np.mean(c_diff), ' computed moves ', np.sum(np.abs(c_computed - 1))/ 32 / 8);
+
+    t.writer.add_run_metadata(t.run_metadata, "step%d" % j, j)
+    t.writer.add_summary(c_merged, j)
     t.writer.flush()
-    memory.update(diff)
-    if j % 100 == 0:
-        memory.data.log_statistics()
 
-    print(datetime.utcnow(), j, 'Loss ', loss, ' diff ', np.mean(diff), ' computed moves ', np.sum(np.abs(computed - 1))/ 32 / 8, ' terminals ', np.sum([t['terminal'] for t in s]))
 
+tl = timeline.Timeline(t.run_metadata.step_stats)
+ctf = tl.generate_chrome_trace_format()
+with open('timeline.json', 'w') as f:
+    f.write(ctf)
 
 nn.save()

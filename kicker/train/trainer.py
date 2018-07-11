@@ -25,7 +25,6 @@ class Trainer:
         self.writer.flush()
 
         self.observations_img = self.build_image_processor()
-        self.tf_train_step = self.build_train_step()
 
         self.debugger = False
 
@@ -43,23 +42,6 @@ class Trainer:
         return sess.run(self.observations_img, feed_dict={
             'observations:0': images
         }, options=self.options, run_metadata=self.run_metadata)
-
-    def build_train_step(self):
-        rewards = tf.placeholder(tf.float32, shape=[None, 8], name='rewards')
-        actions = tf.placeholder(tf.uint8, shape=[None, 8], name='actions')
-        terminals = tf.placeholder(tf.bool, shape=[None], name='terminal')
-
-
-        # inputs = self.observations_img[:,:,:,:self.frame_count]
-        # inputs_next = self.observations_img[:,:,:,1:]
-
-        # inputs.set_shape([None, self.width, self.height, self.frame_count])
-        # inputs_next.set_shape([None, self.width, self.height, self.frame_count])
-
-        inputs = tf.placeholder(tf.float32, shape=[None, self.width, self.height, self.frame_count], name='inputs')
-        inputs_next = tf.placeholder(tf.float32, shape=[None, self.width, self.height, self.frame_count], name='inputs_next')
-
-        return self.compute(actions, inputs, inputs_next, rewards, terminals)
 
     def compute(self, actions, inputs, inputs_next, rewards, terminals):
         computed = self.evaluate_input(inputs)
@@ -80,9 +62,9 @@ class Trainer:
 
         tf.summary.scalar('loss', loss)
         tf.summary.scalar('diff', tf.reduce_mean(tf.abs(q_new - q_old)))
-        tf.summary.scalar('maximal reward', tf.reduce_max(q_new))
-        tf.summary.scalar('mean reward', tf.reduce_mean(q_new))
-        tf.summary.scalar('minimal reward', tf.reduce_min(q_new))
+        tf.summary.scalar('maximal_reward', tf.reduce_max(q_new))
+        tf.summary.scalar('mean_reward', tf.reduce_mean(q_new))
+        tf.summary.scalar('minimal_reward', tf.reduce_min(q_new))
         merged = tf.summary.merge_all()
 
         return train_step, loss, tf.abs(q_new - q_old), tf.argmax(computed, axis=2), merged
