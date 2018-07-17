@@ -5,6 +5,7 @@ import h5py
 import numpy as np
 import argparse
 import cv2
+from datetime  import datetime
 
 
 def ball_pos_and_scores_to_hdf5(games, PATH_TO_CKPT):
@@ -23,7 +24,7 @@ def ball_pos_and_scores_to_hdf5(games, PATH_TO_CKPT):
         with tf.Session(graph=detection_graph, config=config) as sess:
 
             for game_name in games:
-                print('Processing ', game_name)
+                print(datetime.utcnow(), ' Processing ', game_name)
                 game = games[game_name]
 
                 detected_pos = []

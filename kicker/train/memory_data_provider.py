@@ -14,7 +14,7 @@ from kicker.train import BinnedData
 
 
 class MemoryDataProvider:
-    def __init__(self, filename='train/training_data.h5'):
+    def __init__(self, filename='train/training_data_btd.h5'):
         self.file = h5py.File(filename)
         self.width = 320
         self.height = 480
@@ -26,8 +26,7 @@ class MemoryDataProvider:
 
     def load(self):
         games = [g for g in self.file]
-        for game_name in random.sample(games, 5):
-        # min(200, len(games))):
+        for game_name in random.sample(games, min(400, len(games))):
             self.data.add_unseen_data(self.get_train_game_data(game_name))
             print('Done loading {}', game_name)
 
@@ -38,6 +37,9 @@ class MemoryDataProvider:
 
     def get_train_game_data(self, game):
         data = self.file[game]
+
+        if 'table_frames_encoded' not in data:
+             return []
 
         images = self.decode([i for i in data['table_frames_encoded']])
 

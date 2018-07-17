@@ -23,6 +23,7 @@ class Trainer:
 
         self.writer = tf.summary.FileWriter(logdir='tensorboard_logdir', graph=K.get_session().graph)
         self.writer.flush()
+        self.learning_rate = 1e-8
 
         self.observations_img = self.build_image_processor()
 
@@ -52,13 +53,15 @@ class Trainer:
         q_old = tf.reduce_sum(actions_one_hot * computed, axis=2)
         argmax_old = tf.one_hot(tf.argmax(computed_next_old, axis=2), 3, axis=2)
         second_term = self.gamma * tf.reduce_sum(computed_next * argmax_old, axis=2)
+        # second_term = self.gamma * tf.reduce_max(computed_next, axis=2)
         q_new = tf.stop_gradient(rewards + tf.where(terminals, tf.zeros_like(second_term), second_term))
-        loss = tf.losses.huber_loss(q_new, q_old)
+
+        loss = tf.losses.huber_loss(q_new, q_old, delta=50)
         # loss = loss + 0.01 * tf.reduce_mean(tf.where(computed_actions == tf.ones_like(computed_actions), tf.zeros_like(q_new), tf.ones_like(q_new)))
         # loss = loss + 0.1 * tf.reduce_mean(stf.nn.relu(computed[:,:,0] - computed[:,:,1]))
         # loss = loss + 0.1 * tf.reduce_mean(tf.nn.relu(computed[:,:,2] - computed[:,:,1]))
         with tf.name_scope('train'):
-            train_step = tf.train.AdamOptimizer(1e-5).minimize(loss)
+            train_step = tf.train.AdamOptimizer(self.learning_rate).minimize(loss)
 
         tf.summary.scalar('loss', loss)
         tf.summary.scalar('diff', tf.reduce_mean(tf.abs(q_new - q_old)))

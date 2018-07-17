@@ -36,13 +36,13 @@ step, loss, diff, computed, merged = t.compute(a, i, i_n, s, ter)
 
 sess.run(tf.initialize_all_variables())
 
-for j in range(100):
-    _, c_loss, c_diff, c_computed, c_merged = sess.run([step, loss, diff, computed, merged])
-    print(datetime.utcnow(), j, 'Loss ', c_loss, ' diff ', np.mean(c_diff), ' computed moves ', np.sum(np.abs(c_computed - 1))/ 32 / 8);
+for j in range(5000):
 
     t.writer.add_run_metadata(t.run_metadata, "step%d" % j, j)
     t.writer.add_summary(c_merged, j)
     t.writer.flush()
+    _, c_loss, c_diff, c_computed, c_merged = sess.run([step, loss, diff, computed, merged])
+    print(datetime.utcnow(), j, 'Loss ', c_loss, ' diff ', np.mean(c_diff), ' computed moves ', np.sum(np.abs(c_computed - 1))/ 32 / 8);
 
 
 tl = timeline.Timeline(t.run_metadata.step_stats)
