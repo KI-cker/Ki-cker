@@ -8,4 +8,5 @@ class SymbolMapper(object):
         return 0 if value == 0 else value / abs(value)
 
     def inputs2symbols(self, inputs):
-        return map(lambda value: self.symbolmap[SymbolMapper.normalize(value)], inputs)
+        return map(
+            lambda value: self.symbolmap[SymbolMapper.normalize(value)], inputs)

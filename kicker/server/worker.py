@@ -14,6 +14,7 @@ from multiprocessing import Queue, Process
 from kicker.opcua_motor import motor_worker
 from kicker.storage import storage_worker
 
+
 def worker(queue, video_queue, name, model, randomness):
     import tensorflow as tf
     from kicker.agents.neural_net_agent import NeuralNetAgent
@@ -39,7 +40,8 @@ def worker(queue, video_queue, name, model, randomness):
 
     storage_queue = Queue()
     filename = '{}_{}.h5'.format(name, time.strftime('%Y%m%d_%H%M%S'))
-    storage_process = Process(target=storage_worker, args=(storage_queue, yaml_config, 'games_tmp/' + filename))
+    storage_process = Process(target=storage_worker, args=(
+        storage_queue, yaml_config, 'games_tmp/' + filename))
     storage_process.start()
 
     logging.info('started queue')
@@ -48,18 +50,17 @@ def worker(queue, video_queue, name, model, randomness):
     motor_process = Process(target=motor_worker, args=(motor_queue,))
     motor_process.start()
 
-
     monitoring_queue = Queue()
-    monitoring_process = Process(target=monitoring_worker, args=(monitoring_queue,))
+    monitoring_process = Process(
+        target=monitoring_worker, args=(monitoring_queue,))
     monitoring_process.start()
 
     logging.info('started control')
 
-    inputs = [0,] * 8
+    inputs = [0, ] * 8
 
     import socket
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-
 
     while queue.empty():
         logging.info('loop')
@@ -70,7 +71,7 @@ def worker(queue, video_queue, name, model, randomness):
 
             r, f = video.retrieve()
 
-            frame  = agent.new_frame(f)
+            frame = agent.new_frame(f)
             temp_inputs, prediction = agent.get_inputs()
 
             time_neural_net = (time.time() - start_time) * 1000
@@ -85,7 +86,8 @@ def worker(queue, video_queue, name, model, randomness):
             # video_queue.put(f)
             time_total = (time.time() - start_time) * 1000
 
-            sock.sendto(json.dumps([time_neural_net, time_control, time_total]).encode(), ('localhost', 1883))
+            sock.sendto(json.dumps(
+                [time_neural_net, time_control, time_total]).encode(), ('localhost', 1883))
 
     video.release()
 
@@ -106,6 +108,7 @@ def worker(queue, video_queue, name, model, randomness):
     monitoring_process.join()
     # motor.resetEmulation(False)
 
+
 def monitoring_worker(queue):
     import socket
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -116,7 +119,8 @@ def monitoring_worker(queue):
             break
         if queue.empty():
             prediction = data[1].reshape(8, 3)
-            img_enc = cv2.imencode('.jpg', np.swapaxes(data[0], 0, 1)[::-1,:,:])[1].tostring().encode('base64')
+            img_enc = cv2.imencode('.jpg', np.swapaxes(data[0], 0, 1)[
+                                   ::-1, :, :])[1].tostring().encode('base64')
             sock.sendto(img_enc, ('localhost', 1882))
-            sock.sendto(json.dumps(prediction.tolist()).encode(), ('localhost', 1881))
-
+            sock.sendto(json.dumps(prediction.tolist()).encode(),
+                        ('localhost', 1881))

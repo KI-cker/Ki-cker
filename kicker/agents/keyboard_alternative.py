@@ -33,8 +33,10 @@ class KeyboardAgentAlternative(Agent):
             self.update_inputs()
 
     def update_inputs(self):
-        translationSignal = (pygame.K_DOWN in self.pressed) - (pygame.K_UP in self.pressed)
-        rotationSignal = (pygame.K_RIGHT in self.pressed) - (pygame.K_LEFT in self.pressed)
+        translationSignal = (pygame.K_DOWN in self.pressed) - \
+            (pygame.K_UP in self.pressed)
+        rotationSignal = (pygame.K_RIGHT in self.pressed) - \
+            (pygame.K_LEFT in self.pressed)
         goalie = (pygame.K_a in self.pressed) or (pygame.K_1 in self.pressed)
         defense = (pygame.K_s in self.pressed) or (pygame.K_2 in self.pressed)
         midfield = (pygame.K_d in self.pressed) or (pygame.K_3 in self.pressed)

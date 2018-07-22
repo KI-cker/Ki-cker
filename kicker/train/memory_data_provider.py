@@ -43,7 +43,7 @@ class MemoryDataProvider:
 
         images = self.decode([i for i in data['table_frames_encoded']])
 
-        table_frames = [i[:,:,1] for i in images]
+        table_frames = [i[:, :, 1] for i in images]
         actions = [a for a in data['actions']]
         scores = [0.01 * s for s in data['scores']]
         goals_received = [s for s in data['goals_received']]
@@ -51,7 +51,8 @@ class MemoryDataProvider:
 
         length = len(table_frames)
 
-        observations = [np.swapaxes(np.swapaxes(table_frames[k-4:k+1], 0, 2), 0, 1) for k in range(5, length)]
+        observations = [np.swapaxes(np.swapaxes(
+            table_frames[k - 4:k + 1], 0, 2), 0, 1) for k in range(5, length)]
 
         for k in goals_received:
             scores[k] = - 100
@@ -67,7 +68,8 @@ class MemoryDataProvider:
                         terminal = True
                         break
 
-                score = np.sum([0.99 ** l * scores[k + l] for l in range(0, step + 1)])
+                score = np.sum([0.99 ** l * scores[k + l]
+                                for l in range(0, step + 1)])
 
                 data.append({
                     'action': [a + 1 for a in actions[k]],
@@ -81,14 +83,16 @@ class MemoryDataProvider:
 
     def generator(self):
         for d in self.data.unseen_data:
-            yield(d['action'], d['terminal'], [d['score'],]*8, d['images'], d['images_next'])
+            yield(d['action'], d['terminal'], [d['score'], ] * 8, d['images'], d['images_next'])
 
     def get_batch(self, sample=32):
         return self.data.sample(sample)
 
     def build_decoder(self):
-        observations = tf.placeholder(tf.string, shape=[None], name='observations_conv')
-        observations_img = tf.cast(tf.map_fn(lambda i: tf.image.decode_jpeg(i), observations, dtype=tf.uint8), tf.float32)
+        observations = tf.placeholder(
+            tf.string, shape=[None], name='observations_conv')
+        observations_img = tf.cast(tf.map_fn(lambda i: tf.image.decode_jpeg(
+            i), observations, dtype=tf.uint8), tf.float32)
         observations_img.set_shape([None, self.width, self.height, 3])
 
         return observations_img
@@ -105,11 +109,13 @@ class MemoryDataProvider:
 
     def get_as_dataset(self):
         def get_slice_for_key(key, type=np.float32):
-            return np.array([d[key] for d in self.data.unseen_data], dtype=type)
+            return np.array([d[key]
+                             for d in self.data.unseen_data], dtype=type)
 
         return tf.data.Dataset.from_tensor_slices((
             get_slice_for_key('action', np.uint8),
             get_slice_for_key('images'),
             get_slice_for_key('images_next'),
-            np.array([[d['score'], ] * 8 for d in self.data.unseen_data], dtype=np.float32),
+            np.array(
+                [[d['score'], ] * 8 for d in self.data.unseen_data], dtype=np.float32),
             get_slice_for_key('terminal', np.bool)))

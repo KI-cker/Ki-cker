@@ -15,9 +15,12 @@ KTF.set_session(sess)
 
 def build_net(input_shape, num_outputs):
     model = Sequential()
-    model.add(Conv2D(32, (11, 11), padding='same', strides=(5, 5), activation='relu', input_shape=input_shape))
-    model.add(Conv2D(64, (4, 4), padding='same', strides=(2, 2), activation='relu'))
-    model.add(Conv2D(64, (3, 3), padding='same', strides=(2, 2), activation='relu'))
+    model.add(Conv2D(32, (11, 11), padding='same', strides=(
+        5, 5), activation='relu', input_shape=input_shape))
+    model.add(Conv2D(64, (4, 4), padding='same',
+                     strides=(2, 2), activation='relu'))
+    model.add(Conv2D(64, (3, 3), padding='same',
+                     strides=(2, 2), activation='relu'))
     model.add(Flatten())
     model.add(Dense(512, activation='relu'))
     model.add(Dense(24))
@@ -26,8 +29,10 @@ def build_net(input_shape, num_outputs):
 
     return model
 
+
 class NeuralNet():
-    def __init__(self, num_output=24, input_shape=(320, 480, 5), filename='model.h5'):
+    def __init__(self, num_output=24, input_shape=(
+            320, 480, 5), filename='model.h5'):
         self.num_output = num_output
         self.input_shape = input_shape
         self.filename = filename

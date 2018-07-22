@@ -21,7 +21,8 @@ class Trainer:
         self.options = tf.RunOptions(trace_level=tf.RunOptions.FULL_TRACE)
         self.run_metadata = tf.RunMetadata()
 
-        self.writer = tf.summary.FileWriter(logdir='tensorboard_logdir', graph=K.get_session().graph)
+        self.writer = tf.summary.FileWriter(
+            logdir='tensorboard_logdir', graph=K.get_session().graph)
         self.writer.flush()
         self.learning_rate = 1e-8
 
@@ -29,11 +30,13 @@ class Trainer:
 
         self.debugger = False
 
-
     def build_image_processor(self):
-        observations = tf.placeholder(tf.string, shape=[None, self.frame_count + 1], name='observations')
-        observations_img = tf.cast(tf.map_fn(lambda i: self.convert_images(i), observations, dtype=tf.uint8), tf.float32)
-        observations_img.set_shape([None, self.width, self.height, self.frame_count + 1])
+        observations = tf.placeholder(
+            tf.string, shape=[None, self.frame_count + 1], name='observations')
+        observations_img = tf.cast(tf.map_fn(lambda i: self.convert_images(
+            i), observations, dtype=tf.uint8), tf.float32)
+        observations_img.set_shape(
+            [None, self.width, self.height, self.frame_count + 1])
 
         return observations_img
 
@@ -70,28 +73,31 @@ class Trainer:
         tf.summary.scalar('minimal_reward', tf.reduce_min(q_new))
         merged = tf.summary.merge_all()
 
-        return train_step, loss, tf.abs(q_new - q_old), tf.argmax(computed, axis=2), merged
+        return train_step, loss, tf.abs(
+            q_new - q_old), tf.argmax(computed, axis=2), merged
 
     def convert_images(self, inputs):
-        return tf.transpose(tf.map_fn(lambda i: tf.image.decode_jpeg(i), inputs, dtype=tf.uint8)[:,:,:,0], [1,2,0])
-
+        return tf.transpose(tf.map_fn(lambda i: tf.image.decode_jpeg(
+            i), inputs, dtype=tf.uint8)[:, :, :, 0], [1, 2, 0])
 
     def train_step(self, batch):
         if self.debugger:
-            sess = debug.TensorBoardDebugWrapperSession(K.get_session(), 'localhost:6004')
+            sess = debug.TensorBoardDebugWrapperSession(
+                K.get_session(), 'localhost:6004')
             K.set_session(sess)
             self.debugger = False
 
         sess = K.get_session()
 
-        return sess.run(self.tf_train_step, feed_dict=self.build_feed_dict(batch), options=self.options, run_metadata=self.run_metadata)
+        return sess.run(self.tf_train_step, feed_dict=self.build_feed_dict(
+            batch), options=self.options, run_metadata=self.run_metadata)
 
     def evaluate_input(self, input):
         return tf.reshape(self.neural_net.model(input), [32, 8, 3])
 
     def build_feed_dict(self, batch):
         return {
-            'rewards:0': [[s['score'],] * 8 for s in batch],
+            'rewards:0': [[s['score'], ] * 8 for s in batch],
             'actions:0': [s['action'] for s in batch],
             # 'observations:0': [s['observations'] for s in batch],
             'terminal:0': [s['terminal'] for s in batch],

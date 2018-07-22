@@ -5,6 +5,7 @@ import math
 
 logger = logging.getLogger('Memory')
 
+
 class BinnedData:
     def __init__(self):
         self.number_of_bins = 20
@@ -12,7 +13,8 @@ class BinnedData:
         self.unseen_data = []
 
         self.bins = [[] for _ in range(self.number_of_bins)]
-        self.probability_bins = [(0.04 * 2 ** k) ** 0.5 for k in range(self.number_of_bins)]
+        self.probability_bins = [
+            (0.04 * 2 ** k) ** 0.5 for k in range(self.number_of_bins)]
 
         self.weight_unseen = 0
         self.weight_bins = [0 for _ in range(self.number_of_bins)]
@@ -32,7 +34,8 @@ class BinnedData:
 
     def update_weight(self):
         self.weight_unseen = len(self.unseen_data)
-        self.weight_bins = [self.probability_bins[k] * len(self.bins[k]) for k in range(self.number_of_bins)]
+        self.weight_bins = [self.probability_bins[k] *
+                            len(self.bins[k]) for k in range(self.number_of_bins)]
         self.total_weight = self.weight_unseen + np.sum(self.weight_bins)
 
     def sample(self, batch_size=32):
@@ -57,13 +60,13 @@ class BinnedData:
         for k in range(self.number_of_bins):
             self.bins[k].extend(new_elements_in_bins[k])
 
-
     def determine_target_bin(self, delta):
         percentage = delta / self.delta_min
         if percentage < 1:
             return 0
 
-        return min(int(math.log(percentage) / math.log(2)), self.number_of_bins - 1)
+        return min(int(math.log(percentage) / math.log(2)),
+                   self.number_of_bins - 1)
 
     def get(self, i):
         index = i * self.total_weight

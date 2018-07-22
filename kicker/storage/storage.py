@@ -26,13 +26,14 @@ class Storage():
             self.frames.append(cv2.imencode('.jpg', frame)[1].tostring())
             self.times.append(time.time())
             # self.frames = np.concatenate((self.frames, frame.reshape(self.shape)), axis=0)
-        
+
     def add_action(self, action):
         action = np.array(action)
         if self.actions is None:
             self.actions = action.reshape((1, 8))
         else:
-            self.actions = np.concatenate((self.actions, action.reshape(1, 8)), axis=0)
+            self.actions = np.concatenate(
+                (self.actions, action.reshape(1, 8)), axis=0)
 
     def save(self):
         dataset_name = self._next_dataset()
@@ -53,4 +54,3 @@ class Storage():
 
     def _next_dataset(self):
         return "game{}".format(len(self.file.keys()) + 1)
-

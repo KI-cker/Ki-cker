@@ -2,7 +2,9 @@ import logging
 
 from kicker.opcua.opcua_controller import OpcuaController
 
-logging.basicConfig(filename='opcua.log', level=logging.ERROR, format='%(asctime)s %(filename)s %(lineno)d %(levelname)s %(message)s')
+logging.basicConfig(filename='opcua.log', level=logging.ERROR,
+                    format='%(asctime)s %(filename)s %(lineno)d %(levelname)s %(message)s')
+
 
 def motor_worker(queue):
     motor = MotorController()
@@ -26,7 +28,7 @@ class MotorController(OpcuaController):
         self.connect()
 
         self.last_action = [0, 0, 0, 0, 0, 0, 0, 0]
-        self.NO_ACTION = 0 # a magic number
+        self.NO_ACTION = 0  # a magic number
 
     def translation(self, axisno, direction):
         if direction == 0:
@@ -82,7 +84,6 @@ class MotorController(OpcuaController):
             self.rotation(1, action[0])
         if diffAction[1] != self.NO_ACTION:
             self.translation(1, action[1])
-
 
     def stop_all(self):
         self.translation(1, 0)

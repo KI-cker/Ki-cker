@@ -4,7 +4,6 @@ import cv2
 from kicker.image import Analyzer
 
 
-
 class Converter:
     def __init__(self, parser, game, shape=(320, 480)):
         self.parser = parser
@@ -24,4 +23,5 @@ class Converter:
         return [self.get_table_frame(i) for i in range(number)]
 
     def get_table_frames_encoded(self):
-        return [cv2.imencode('.jpg', i)[1].tostring() for i in self.get_table_frames()]
+        return [cv2.imencode('.jpg', i)[1].tostring()
+                for i in self.get_table_frames()]

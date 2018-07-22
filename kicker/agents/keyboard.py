@@ -7,9 +7,9 @@ class KeyboardAgent(Agent):
     def __init__(self):
         Agent.__init__(self)
         self.keymap = {
-            pygame.K_a: (1, 1),  pygame.K_s: (3, 1),  pygame.K_d: (5, 1),  pygame.K_f: (7, 1),
+            pygame.K_a: (1, 1), pygame.K_s: (3, 1), pygame.K_d: (5, 1), pygame.K_f: (7, 1),
             pygame.K_q: (1, -1), pygame.K_w: (3, -1), pygame.K_e: (5, -1), pygame.K_r: (7, -1),
-            pygame.K_j: (0, 1),  pygame.K_k: (2, 1),  pygame.K_l: (4, 1),  pygame.K_SEMICOLON: (6, 1),
+            pygame.K_j: (0, 1), pygame.K_k: (2, 1), pygame.K_l: (4, 1), pygame.K_SEMICOLON: (6, 1),
             pygame.K_u: (0, -1), pygame.K_i: (2, -1), pygame.K_o: (4, -1), pygame.K_p: (6, -1)
         }
 
