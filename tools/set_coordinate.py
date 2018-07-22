@@ -6,6 +6,7 @@ import sys
 import os
 import yaml
 
+
 def load_frame():
     f = h5py.File('train/Fabian_20180308_080924.h5')
     g = f['game1']
@@ -14,10 +15,12 @@ def load_frame():
     b.extend(frames[0])
     return cv2.imdecode(np.array(b), cv2.IMREAD_COLOR)
 
+
 def get_frame_camera():
     cap = cv2.VideoCapture(1)
     r, f = cap.read()
     return f
+
 
 def get_variable_name():
     if len(sys.argv) < 2:
@@ -28,6 +31,7 @@ def get_variable_name():
     print("Setting {}".format(var_name))
     return var_name
 
+
 def set_variable(var_name, value):
     config = {}
     config_file_name = 'config.yml'
@@ -36,7 +40,7 @@ def set_variable(var_name, value):
             config = yaml.load(f)
 
     if 'coordinates' not in config:
-        config['coordinates'] = {};
+        config['coordinates'] = {}
 
     config['coordinates'][var_name] = value
 
@@ -47,6 +51,7 @@ def set_variable(var_name, value):
 def terminate():
     pygame.quit()
     sys.exit()
+
 
 def main():
     var_name = get_variable_name()
@@ -68,6 +73,7 @@ def main():
             elif event.type == pygame.MOUSEBUTTONUP:
                 set_variable(var_name, [event.pos[1], event.pos[0]])
                 terminate()
+
 
 if __name__ == '__main__':
     main()

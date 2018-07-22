@@ -2,6 +2,7 @@ import argparse
 
 from kicker.train import Parser, Converter
 
+
 def add_table_frames(filename):
     p = Parser(filename)
 
@@ -13,6 +14,7 @@ def add_table_frames(filename):
             p.file[g]['table_frames_encoded'] = c.get_table_frames_encoded()
 
     p.file.flush()
+
 
 def main():
     parser = argparse.ArgumentParser()

@@ -10,7 +10,9 @@ from kicker.train import Parser
 def encode_frames(frames):
     return [cv2.imencode('.jpg', f)[1].tostring() for f in frames]
 
-def add_new_group_to_file(f, frames, positions, actions, good_indices, goals_received):
+
+def add_new_group_to_file(f, frames, positions, actions,
+                          good_indices, goals_received):
     current_count = len(f)
     new_name = "game{}".format(current_count + 1)
 
@@ -23,7 +25,8 @@ def add_new_group_to_file(f, frames, positions, actions, good_indices, goals_rec
     group['good_indices'] = good_indices
     group['goals_received'] = goals_received
 
-def detect_goals_received(positions,  scores):
+
+def detect_goals_received(positions, scores):
     goals_received = []
     number = len(positions)
 
@@ -34,18 +37,27 @@ def detect_goals_received(positions,  scores):
 
     return goals_received
 
+
 def process(p, f):
     for g in p.file:
         print("Processing {}".format(g))
         frames, positions, actions, scores = p.get_game_data(g)
         scores = np.array(scores)
         number = len(scores)
-        good_indices = [index for index in range(1, number) if np.min(scores[index-1:index+2]) > 0.9]
+        good_indices = [index for index in range(
+            1, number) if np.min(scores[index - 1:index + 2]) > 0.9]
 
         goals_received = detect_goals_received(positions, scores)
 
         if len(good_indices) > 5:
-            add_new_group_to_file(f, frames, positions, actions, good_indices, goals_received)
+            add_new_group_to_file(
+                f,
+                frames,
+                positions,
+                actions,
+                good_indices,
+                goals_received)
+
 
 def main():
     parser = argparse.ArgumentParser()

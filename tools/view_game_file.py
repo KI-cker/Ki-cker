@@ -20,10 +20,17 @@ sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
 
 def show_prediction(frames, position):
-    observation = np.concatenate([(f[:,:,1]).reshape((320, 480, 1)) for f in frames], axis=2)
+    observation = np.concatenate(
+        [(f[:, :, 1]).reshape((320, 480, 1)) for f in frames], axis=2)
     prediction = nn.predict_single(observation).reshape(8, 3)
 
-    print(np.argmax(prediction, axis=1) - np.ones(8), position, np.min(prediction))
+    print(
+        np.argmax(
+            prediction,
+            axis=1) -
+        np.ones(8),
+        position,
+        np.min(prediction))
 
     # ball_frame = frames[4].copy()
     # cv2.circle(ball_frame, tuple(position + 9), 9, (255, 0, 0))
@@ -31,7 +38,14 @@ def show_prediction(frames, position):
     # fig.plot(frames[2], frames[3], ball_frame, prediction)
     img_enc = cv2.imencode('.jpg', frames[4])[1].tostring().encode('base64')
     sock.sendto(img_enc, ('localhost', 1882))
-    sock.sendto(json.dumps(np.max(prediction, axis=1).tolist()).encode(), ('localhost', 1881))
+    sock.sendto(
+        json.dumps(
+            np.max(
+                prediction,
+                axis=1).tolist()).encode(),
+        ('localhost',
+         1881))
+
 
 # parser = Parser(filename='train/Fabian_20180209_095009.h5')
 # parser = Parser(filename='train/Fabian_20180209_133730.h5')
@@ -44,6 +58,7 @@ for game_name in parser.file:
 
     length = len(table_frames)
 
-    for j in range(4, length-1):
-        #if scores[j] > 0.7:
-        show_prediction([table_frames[j + k] for k in range(-4, 1)], positions[j])
+    for j in range(4, length - 1):
+        # if scores[j] > 0.7:
+        show_prediction([table_frames[j + k]
+                         for k in range(-4, 1)], positions[j])

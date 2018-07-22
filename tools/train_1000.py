@@ -15,7 +15,10 @@ from kicker.train import Trainer
 from kicker.neural_net import NeuralNet
 
 import logging
-logging.basicConfig(filename='train.log', level=logging.DEBUG, format='%(asctime)s %(filename)s %(lineno)d %(levelname)s %(message)s')
+logging.basicConfig(
+    filename='train.log',
+    level=logging.DEBUG,
+    format='%(asctime)s %(filename)s %(lineno)d %(levelname)s %(message)s')
 
 
 nn = NeuralNet()
@@ -26,7 +29,8 @@ memory = MemoryDataProvider()
 memory.load()
 
 dataset = memory.get_as_dataset()
-next_item = dataset.repeat().batch(32).prefetch(1).make_one_shot_iterator().get_next()
+next_item = dataset.repeat().batch(32).prefetch(
+    1).make_one_shot_iterator().get_next()
 
 
 sess = K.get_session()
@@ -41,8 +45,22 @@ for j in range(5000):
     t.writer.add_run_metadata(t.run_metadata, "step%d" % j, j)
     t.writer.add_summary(c_merged, j)
     t.writer.flush()
-    _, c_loss, c_diff, c_computed, c_merged = sess.run([step, loss, diff, computed, merged])
-    print(datetime.utcnow(), j, 'Loss ', c_loss, ' diff ', np.mean(c_diff), ' computed moves ', np.sum(np.abs(c_computed - 1))/ 32 / 8);
+    _, c_loss, c_diff, c_computed, c_merged = sess.run(
+        [step, loss, diff, computed, merged])
+    print(
+        datetime.utcnow(),
+        j,
+        'Loss ',
+        c_loss,
+        ' diff ',
+        np.mean(c_diff),
+        ' computed moves ',
+        np.sum(
+            np.abs(
+                c_computed -
+                1)) /
+        32 /
+        8)
 
 
 tl = timeline.Timeline(t.run_metadata.step_stats)

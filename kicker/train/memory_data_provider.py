@@ -39,7 +39,7 @@ class MemoryDataProvider:
         data = self.file[game]
 
         if 'table_frames_encoded' not in data:
-             return []
+            return []
 
         images = self.decode([i for i in data['table_frames_encoded']])
 
