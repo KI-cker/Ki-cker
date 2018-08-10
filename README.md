@@ -5,6 +5,10 @@ Add the current directory to the search path via
 ```
 export PYTHONPATH=$(pwd)
 ``` 
+install requirements via
+```
+pip install -r requirements.txt
+```
 
 ## Preprocessing for training
 

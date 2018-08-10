@@ -32,19 +32,19 @@ def show_prediction(frames, position):
         position,
         np.min(prediction))
 
-    # ball_frame = frames[4].copy()
-    # cv2.circle(ball_frame, tuple(position + 9), 9, (255, 0, 0))
-    #
-    # fig.plot(frames[2], frames[3], ball_frame, prediction)
-    img_enc = cv2.imencode('.jpg', frames[4])[1].tostring().encode('base64')
-    sock.sendto(img_enc, ('localhost', 1882))
-    sock.sendto(
-        json.dumps(
-            np.max(
-                prediction,
-                axis=1).tolist()).encode(),
-        ('localhost',
-         1881))
+    ball_frame = frames[4].copy()
+    cv2.circle(ball_frame, tuple(position + 9), 9, (255, 0, 0))
+
+    fig.plot(frames[2], frames[3], ball_frame, prediction)
+    # img_enc = cv2.imencode('.jpg', frames[4])[1].tostring().encode('base64')
+    # sock.sendto(img_enc, ('localhost', 1882))
+    # sock.sendto(
+    #     json.dumps(
+    #         np.max(
+    #             prediction,
+    #             axis=1).tolist()).encode(),
+    #     ('localhost',
+    #      1881))
 
 
 # parser = Parser(filename='train/Fabian_20180209_095009.h5')
