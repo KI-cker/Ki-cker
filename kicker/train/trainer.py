@@ -24,7 +24,7 @@ class Trainer:
         self.writer = tf.summary.FileWriter(
             logdir='tensorboard_logdir', graph=K.get_session().graph)
         self.writer.flush()
-        self.learning_rate = 1e-8
+        self.learning_rate = 1e-4
 
         self.observations_img = self.build_image_processor()
 

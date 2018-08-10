@@ -28,12 +28,13 @@ t = Trainer(nn)
 memory = MemoryDataProvider()
 dataset = memory.load_as_dataset()
 
-next_item = dataset.repeat().batch(32).prefetch(
+next_item = dataset.repeat().shuffle(1000).batch(32).prefetch(
     1).make_one_shot_iterator().get_next()
 
 a, i, i_n, s, ter = next_item
 step, loss, diff, computed, merged = t.compute(a, i, i_n, s, ter)
 
+sess = K.get_session()
 sess.run(tf.global_variables_initializer())
 
 for j in range(5000):
