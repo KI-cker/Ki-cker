@@ -6,5 +6,6 @@
 .ipynb_checkpoints
 *.pb
 *.ipynb
+.pytest_cache/
 
 tensorboard_logdir
