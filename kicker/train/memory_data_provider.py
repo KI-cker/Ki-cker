@@ -14,7 +14,7 @@ from kicker.train import BinnedData
 
 
 class MemoryDataProvider:
-    def __init__(self, filename='train/training_data_btd.h5'):
+    def __init__(self, filename='train/training_data.h5'):
         self.file = h5py.File(filename)
         self.width = 320
         self.height = 480
@@ -26,9 +26,21 @@ class MemoryDataProvider:
 
     def load(self):
         games = [g for g in self.file]
-        for game_name in random.sample(games, min(400, len(games))):
+        for game_name in random.sample(games, 1):
             self.data.add_unseen_data(self.get_train_game_data(game_name))
             print('Done loading {}', game_name)
+
+    def load_as_dataset(self, session):
+        games = [g for g in self.file]
+        dataset = tf.data.Dataset.from_tensor_slices(
+            random.sample(games, min(400, len(games))))
+        return dataset.interleave(lambda game: tf.data.Dataset.from_tensor_slices(tf.py_func(self.get_train_game_data_as_dataset, [game], [
+
+            tf.float32,
+            tf.float32,
+            tf.float32,
+            tf.float32,
+            tf.float32])), cycle_length=4)
 
     def decode_image(self, raw):
         b = bytearray()
@@ -108,14 +120,22 @@ class MemoryDataProvider:
         self.data.update_with_deltas(np.max(diff, axis=1))
 
     def get_as_dataset(self):
+        return tf.data.Dataset.from_tensor_slices(self.convert_to_dataset(self.data.unseen_data))
+
+    def convert_to_dataset(self, data):
         def get_slice_for_key(key, type=np.float32):
             return np.array([d[key]
-                             for d in self.data.unseen_data], dtype=type)
+                             for d in data], dtype=type)
 
-        return tf.data.Dataset.from_tensor_slices((
+        return (
             get_slice_for_key('action', np.uint8),
             get_slice_for_key('images'),
             get_slice_for_key('images_next'),
             np.array(
-                [[d['score'], ] * 8 for d in self.data.unseen_data], dtype=np.float32),
-            get_slice_for_key('terminal', np.bool)))
+                [[d['score'], ] * 8 for d in data], dtype=np.float32),
+            get_slice_for_key('terminal', np.bool))
+
+    def get_train_game_data_as_dataset(self, game):
+        print(game)
+        data = self.get_train_game_data(game)
+        return self.convert_to_dataset(data)

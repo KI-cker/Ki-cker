@@ -38,15 +38,16 @@ sess = K.get_session()
 a, i, i_n, s, ter = next_item
 step, loss, diff, computed, merged = t.compute(a, i, i_n, s, ter)
 
-sess.run(tf.initialize_all_variables())
+sess.run(tf.global_variables_initializer())
 
 for j in range(5000):
 
+    _, c_loss, c_diff, c_computed, c_merged = sess.run(
+        [step, loss, diff, computed, merged])
     t.writer.add_run_metadata(t.run_metadata, "step%d" % j, j)
     t.writer.add_summary(c_merged, j)
     t.writer.flush()
-    _, c_loss, c_diff, c_computed, c_merged = sess.run(
-        [step, loss, diff, computed, merged])
+
     print(
         datetime.utcnow(),
         j,
