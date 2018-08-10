@@ -4,7 +4,8 @@ import logging
 import pygame
 import numpy as np
 from multiprocessing import Process, Queue
-import sys, os
+import sys
+import os
 import tensorflow as tf
 import yaml
 
@@ -19,11 +20,13 @@ from kicker.image import add_ball, Analyzer
 pygame.init()
 pygame.font.init()
 
-logging.basicConfig(filename='kicker.log', level=logging.DEBUG, format='%(asctime)s %(filename)s %(lineno)d %(levelname)s %(message)s')
+logging.basicConfig(filename='kicker.log', level=logging.DEBUG,
+                    format='%(asctime)s %(filename)s %(lineno)d %(levelname)s %(message)s')
 logging.info("Fussball ist wie Schach nur ohne Wuerfel")
 
 
 import keras.backend.tensorflow_backend as KTF
+
 
 def get_session(gpu_fraction=0.4):
     num_threads = os.environ.get('OMP_NUM_THREADS')
@@ -42,11 +45,14 @@ def set_keras_gpu_use(percentage):
     sess = tf.Session(config=config)
     KTF.set_session(sess)
 
+
 set_keras_gpu_use(0.4)
+
 
 def read_config():
     with open('config.yml', 'r') as f:
         return yaml.load(f)
+
 
 class Application(object):
     def __init__(self, agent, enable_storage=True):
@@ -66,10 +72,10 @@ class Application(object):
 
         self.enable_storage = enable_storage
 
-
         if self.enable_storage:
             self.storage_queue = Queue()
-            self.storage_process = Process(target=storage_worker, args=(self.storage_queue, self.config))
+            self.storage_process = Process(
+                target=storage_worker, args=(self.storage_queue, self.config))
             self.storage_process.start()
 
         self.analyzer = Analyzer(self.config)
@@ -79,7 +85,8 @@ class Application(object):
         self.motor.control(self.inputs)
 
     def run(self):
-        self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))
+        self.screen = pygame.display.set_mode(
+            (self.screen_width, self.screen_height))
 
         while True:
             # logging.debug("Start event loop")
@@ -91,7 +98,8 @@ class Application(object):
                 # img, c_x, c_y = add_ball(f[:])
                 img = f[:]
                 # img = self.analyzer.add_circles_to_limiters(img[:, :, ::-1])
-                img = self.analyzer.extract_table(img, (self.screen_width, self.screen_height))
+                img = self.analyzer.extract_table(
+                    img, (self.screen_width, self.screen_height))
 
                 # img = cv2.resize(img, (self.screen_width, self.screen_height))
 
@@ -101,7 +109,8 @@ class Application(object):
                     self.storage_queue.put((f, self.inputs))
 
                 logging.debug("start updating window")
-                pygame.surfarray.blit_array(self.screen, np.swapaxes(img[::-1, ::-1, ::-1], 0, 1))
+                pygame.surfarray.blit_array(
+                    self.screen, np.swapaxes(img[::-1, ::-1, ::-1], 0, 1))
                 # pygame.surfarray.blit_array(self.screen, img)
                 pygame.display.update()
                 # logging.debug("start processing events")
@@ -125,6 +134,7 @@ class Application(object):
                 # self.inputs = self.helper.handle_forbidden_moves(self.possible_moves, inputs)
                 self.inputs = inputs
                 self.submit_inputs()
+
 
 if __name__ == '__main__':
     # agent = RandomAgent()

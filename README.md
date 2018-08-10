@@ -9,6 +9,10 @@ install requirements via
 ```
 pip install -r requirements.txt
 ```
+Automatic code formatting via
+```
+autopep8 -r --in-place *.py
+```
 
 ## Preprocessing for training
 

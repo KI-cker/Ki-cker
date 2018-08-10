@@ -7,7 +7,8 @@ from flask import Flask, render_template, redirect, url_for, request, Response
 
 from kicker.server.worker import worker
 
-logging.basicConfig(filename='kicker.log', level=logging.DEBUG, format='%(asctime)s %(filename)s %(lineno)d %(levelname)s %(message)s')
+logging.basicConfig(filename='kicker.log', level=logging.DEBUG,
+                    format='%(asctime)s %(filename)s %(lineno)d %(levelname)s %(message)s')
 logging.info("Fussball ist wie Schach nur ohne Wuerfel")
 
 from glob import glob
@@ -16,7 +17,9 @@ process = None
 
 stop_queue = Queue()
 video_queue = Queue()
-app = Flask('__name__', static_url_path='/assets', static_folder='templates/assets')
+app = Flask('__name__', static_url_path='/assets',
+            static_folder='templates/assets')
+
 
 @app.route('/')
 def index():
@@ -29,6 +32,7 @@ def index():
     else:
         return render_template('stop.html')
 
+
 @app.route('/stop')
 def stop():
     global process, stop_queue
@@ -40,6 +44,7 @@ def stop():
 
     return redirect(url_for('index'))
 
+
 @app.route('/start', methods=['POST'])
 def start():
     global process, stop_queue, video_queue
@@ -48,12 +53,15 @@ def start():
     model = request.form['model']
     randomness = float(request.form['randomness']) / 100.0
 
-    print('Starting. Name {}    Model {}    Randomness {}'.format(name, model, randomness))
+    print('Starting. Name {}    Model {}    Randomness {}'.format(
+        name, model, randomness))
 
-    process = Process(target=worker, args=(stop_queue, video_queue, name, model, randomness))
+    process = Process(target=worker, args=(
+        stop_queue, video_queue, name, model, randomness))
     process.start()
 
     return redirect(url_for('index'))
+
 
 def generate_video(video_queue):
     font = cv2.FONT_HERSHEY_SIMPLEX
@@ -67,8 +75,10 @@ def generate_video(video_queue):
 
         if frame is not None:
             time_diff = time.time() - start_time
-            cv2.putText(frame, '{}'.format(time_diff), (10, 50), font, 1, (255, 255, 255))
-            cv2.putText(frame, 'FPS {}'.format(float(number)/time_diff), (10, 100), font, 1, (255, 255, 255))
+            cv2.putText(frame, '{}'.format(time_diff),
+                        (10, 50), font, 1, (255, 255, 255))
+            cv2.putText(frame, 'FPS {}'.format(float(number) /
+                                               time_diff), (10, 100), font, 1, (255, 255, 255))
             jpeg_frame = cv2.imencode('.jpg', frame)[1].tobytes()
             yield (b'--frame\r\n'
                    b'Content-Type: image/jpeg\r\n\r\n' + jpeg_frame + b'\r\n')
