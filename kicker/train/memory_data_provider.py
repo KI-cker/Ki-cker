@@ -30,17 +30,18 @@ class MemoryDataProvider:
             self.data.add_unseen_data(self.get_train_game_data(game_name))
             print('Done loading {}', game_name)
 
-    def load_as_dataset(self, session):
+    def load_as_dataset(self, max_number=400):
         games = [g for g in self.file]
-        dataset = tf.data.Dataset.from_tensor_slices(
-            random.sample(games, min(400, len(games))))
-        return dataset.interleave(lambda game: tf.data.Dataset.from_tensor_slices(tf.py_func(self.get_train_game_data_as_dataset, [game], [
+        game_sample = random.sample(games, min(max_number, len(games)))
 
-            tf.float32,
-            tf.float32,
-            tf.float32,
-            tf.float32,
-            tf.float32])), cycle_length=4)
+        dataset = self.get_train_game_data_as_dataset(game_sample[0])
+        print('Done loading {}', game_sample[0])
+
+        for game_name in game_sample[1:]:
+            dataset.concatenate(self.get_train_game_data_as_dataset(game_name))
+            print('Done loading {}', game_name)
+
+        return dataset
 
     def decode_image(self, raw):
         b = bytearray()
@@ -136,6 +137,6 @@ class MemoryDataProvider:
             get_slice_for_key('terminal', np.bool))
 
     def get_train_game_data_as_dataset(self, game):
-        print(game)
         data = self.get_train_game_data(game)
-        return self.convert_to_dataset(data)
+        raw = self.convert_to_dataset(data)
+        return tf.data.Dataset.from_tensor_slices(raw)

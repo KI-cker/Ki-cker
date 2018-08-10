@@ -26,14 +26,10 @@ nn = NeuralNet()
 t = Trainer(nn)
 
 memory = MemoryDataProvider()
-memory.load()
+dataset = memory.load_as_dataset()
 
-dataset = memory.get_as_dataset()
 next_item = dataset.repeat().batch(32).prefetch(
     1).make_one_shot_iterator().get_next()
-
-
-sess = K.get_session()
 
 a, i, i_n, s, ter = next_item
 step, loss, diff, computed, merged = t.compute(a, i, i_n, s, ter)

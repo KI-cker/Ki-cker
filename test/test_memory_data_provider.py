@@ -12,7 +12,9 @@ def test_memory_data_provder():
 
     item = data[0]
 
-    assert(set(item.keys()) == {'action', 'score', 'images', 'images_next', 'terminal'})
+    assert(set(item.keys()) == {'action', 'score',
+                                'images', 'images_next', 'terminal'})
+
 
 def test_memory_data_provider_as_dataset():
     data = m.get_train_game_data_as_dataset('game1')
@@ -31,3 +33,23 @@ def test_memory_data_provider_as_dataset():
     assert(types[2] == tf.float32)
     assert(types[3] == tf.float32)
     assert(types[4] == tf.bool)
+
+
+def test_memory_data_provider_load_dataset():
+    sess = tf.InteractiveSession()
+    dataset = m.load_as_dataset(max_number=3)
+
+    shapes = dataset.output_shapes
+    types = dataset.output_types
+
+    assert (shapes[0].dims == [8])
+    assert (shapes[1].dims == [320, 480, 5])
+    assert (shapes[2].dims == [320, 480, 5])
+    assert (shapes[3].dims == [8])
+    assert (shapes[4].dims == [])
+
+    assert (types[0] == tf.uint8)
+    assert (types[1] == tf.float32)
+    assert (types[2] == tf.float32)
+    assert (types[3] == tf.float32)
+    assert (types[4] == tf.bool)

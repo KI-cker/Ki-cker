@@ -11,7 +11,7 @@ pip install -r requirements.txt
 ```
 Automatic code formatting via
 ```
-autopep8 -r --in-place *.py
+autopep8 -r --in-place .
 ```
 
 ## Preprocessing for training
