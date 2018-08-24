@@ -34,4 +34,4 @@ for game_name in interesting_games:
     for j in range(4, length - 1):
         plot_predictions([table_frames[j + k] for k in range(-4, 1)])
 
-    fig.figure.show()
+    fig.figure.savefig('images/'+game_name+'.jpg')

@@ -1,3 +1,5 @@
+import matplotlib
+matplotlib.use('Agg')
 from matplotlib import pyplot, cm, gridspec
 import numpy as np
 import seaborn as sns
