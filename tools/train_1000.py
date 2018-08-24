@@ -25,8 +25,8 @@ nn = NeuralNet()
 
 t = Trainer(nn)
 
-memory = MemoryDataProvider()
-dataset = memory.load_as_dataset()
+memory = MemoryDataProvider(filename='./Spieldaten/train.h5')
+dataset = memory.load_as_dataset(max_number=5)
 
 next_item = dataset.repeat().shuffle(1000).batch(32).prefetch(
     1).make_one_shot_iterator().get_next()

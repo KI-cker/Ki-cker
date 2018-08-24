@@ -50,7 +50,7 @@ def show_prediction(frames, position):
 # parser = Parser(filename='train/Fabian_20180209_095009.h5')
 # parser = Parser(filename='train/Fabian_20180209_133730.h5')
 # parser = Parser(filename='train/Fabian_20180308_080924.h5')
-parser = Parser(filename='train/Fabian_20180314_133913.h5')
+parser = Parser(filename='./Spieldaten/hidden.h5')
 # parser = Parser(filename='train/Fabian_20180314_091655.h5')
 
 for game_name in parser.file:
