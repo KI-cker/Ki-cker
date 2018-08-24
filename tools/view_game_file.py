@@ -11,7 +11,7 @@ from kicker.visualize import Figure
 # d = DataProvider(return_observations=True, filename='train/training_data_new.h5')
 # s = d.get_batch()
 #
-nn = NeuralNet(23, (320, 480, 5), filename='model.h5')
+nn = NeuralNet(23, (320, 480, 5), filename='./Spieldaten/model.h5')
 
 fig = Figure(wait_for_button_press=False, show_images=True)
 
@@ -35,17 +35,13 @@ def show_prediction(frames, position):
     ball_frame = frames[4].copy()
     cv2.circle(ball_frame, tuple(position + 9), 9, (255, 0, 0))
 
+    ball_frame = frames[4].copy()
+    cv2.circle(ball_frame, tuple(position + 9), 9, (255, 0, 0))
+
     fig.plot(frames[2], frames[3], ball_frame, prediction)
     # img_enc = cv2.imencode('.jpg', frames[4])[1].tostring().encode('base64')
     # sock.sendto(img_enc, ('localhost', 1882))
-    # sock.sendto(
-    #     json.dumps(
-    #         np.max(
-    #             prediction,
-    #             axis=1).tolist()).encode(),
-    #     ('localhost',
-    #      1881))
-
+    # sock.sendto(json.dumps(np.max(prediction, axis=1).tolist()).encode(), ('localhost', 1881))
 
 # parser = Parser(filename='train/Fabian_20180209_095009.h5')
 # parser = Parser(filename='train/Fabian_20180209_133730.h5')
