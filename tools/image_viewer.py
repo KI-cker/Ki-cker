@@ -1,9 +1,15 @@
+import argparse
+
 import cv2
 import numpy as np
 
 from kicker.train import DataProvider, Parser
 from kicker.neural_net import NeuralNet
 from kicker.visualize import Figure
+
+parser = argparse.ArgumentParser()
+parser.add_argument('-c','--training_count')
+args = parser.parse_args()
 
 nn = NeuralNet(23, (320, 480, 5), filename='model.h5')
 
@@ -22,8 +28,7 @@ def plot_predictions(frames):
 
 
 parser = Parser(filename='Spieldaten/hidden.h5')
-interesting_games = ["game4", "game5", "game7", "game24", "game28", "game102", "game107", "game115", "game118",
-                    "game133", "game149"]
+interesting_games = ["game4", "game28", "game102", "game107", "game118","game133"]
 
 for game_name in interesting_games:
     table_frames, positions, actions, scores = parser.get_game_data(game_name)
@@ -34,4 +39,4 @@ for game_name in interesting_games:
     for j in range(4, length - 1):
         plot_predictions([table_frames[j + k] for k in range(-4, 1)])
 
-    fig.figure.savefig('images/'+game_name+'.jpg')
+    fig.figure.savefig('images/'+game_name+'_after'+args.training_count+'_training_runs.jpg')
