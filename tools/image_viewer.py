@@ -9,6 +9,7 @@ from kicker.visualize import Figure
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-c','--training_count')
+parser.add_argument('-f','--folder_name')
 args = parser.parse_args()
 
 nn = NeuralNet(23, (320, 480, 5), filename='model.h5')
@@ -34,9 +35,9 @@ for game_name in interesting_games:
     table_frames, positions, actions, scores = parser.get_game_data(game_name)
 
     length = len(table_frames)
-    print("This is game: ", game_name)
+    print("Visualized Q-values for", game_name)
 
     for j in range(4, length - 1):
         plot_predictions([table_frames[j + k] for k in range(-4, 1)])
 
-    fig.figure.savefig('images/'+game_name+'_after'+args.training_count+'_training_runs.jpg')
+    fig.figure.savefig('images/'+args.folder_name+'/'+game_name+'_after_'+args.training_count+'_training_runs.jpg')

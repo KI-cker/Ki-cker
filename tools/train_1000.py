@@ -1,3 +1,5 @@
+import argparse
+
 import random
 
 import numpy as np
@@ -20,10 +22,14 @@ logging.basicConfig(
     level=logging.DEBUG,
     format='%(asctime)s %(filename)s %(lineno)d %(levelname)s %(message)s')
 
+parser = argparse.ArgumentParser()
+parser.add_argument('-l','--learning_rate')
+parser.add_argument('-g','--gamma')
+args = parser.parse_args()
 
 nn = NeuralNet()
 
-t = Trainer(nn)
+t = Trainer(nn,gamma=args.gamma,learning_rate=args.learning_rate)
 
 memory = MemoryDataProvider(filename='./Spieldaten/train.h5')
 dataset = memory.load_as_dataset(max_number=5)

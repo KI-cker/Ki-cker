@@ -8,8 +8,8 @@ from tensorflow.python import debug
 
 
 class Trainer:
-    def __init__(self, neural_net, shape=(320, 480), frame_count=5):
-        self.gamma = 0.99
+    def __init__(self, neural_net, shape=(320, 480), frame_count=5, gamma=0.99, learning_rate=1e-4):
+        self.gamma = gamma
         self.punishment_for_moving = 0.1
         self.neural_net = neural_net
         self.neural_net_old = NeuralNet(filename=self.neural_net.filename)
@@ -24,7 +24,7 @@ class Trainer:
         self.writer = tf.summary.FileWriter(
             logdir='tensorboard_logdir', graph=K.get_session().graph)
         self.writer.flush()
-        self.learning_rate = 1e-4
+        self.learning_rate = learning_rate
 
         self.observations_img = self.build_image_processor()
 
