@@ -29,7 +29,10 @@ args = parser.parse_args()
 
 nn = NeuralNet()
 
-t = Trainer(nn,gamma=args.gamma,learning_rate=args.learning_rate)
+gamma = tf.cast(args.gamma,tf.float32)
+learning_rate = tf.cast(args.learning_rate,tf.float32)
+
+t = Trainer(nn,gamma=gamma,learning_rate=learning_rate)
 
 memory = MemoryDataProvider(filename='./Spieldaten/train.h5')
 dataset = memory.load_as_dataset(max_number=5)
