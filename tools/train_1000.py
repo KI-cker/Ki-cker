@@ -29,6 +29,9 @@ args = parser.parse_args()
 
 nn = NeuralNet()
 
+learning_rate = 1e-4
+gamma = 0.99
+
 if args.learning_rate:
     learning_rate = float(args.learning_rate)
 if args.gamma:
