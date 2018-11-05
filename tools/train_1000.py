@@ -29,8 +29,10 @@ args = parser.parse_args()
 
 nn = NeuralNet()
 
-gamma = tf.cast(args.gamma,tf.float32)
-learning_rate = tf.cast(args.learning_rate,tf.float32)
+if args.learning_rate:
+    learning_rate = float(args.learning_rate)
+if args.gamma:
+    gamma = float(args.gamma)
 
 t = Trainer(nn,gamma=gamma,learning_rate=learning_rate)
 

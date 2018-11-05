@@ -40,13 +40,6 @@ class Trainer:
 
         return observations_img
 
-    def decode(self, images):
-        sess = K.get_session()
-
-        return sess.run(self.observations_img, feed_dict={
-            'observations:0': images
-        }, options=self.options, run_metadata=self.run_metadata)
-
     def compute(self, actions, inputs, inputs_next, rewards, terminals):
         computed = self.evaluate_input(inputs)
         computed_next = self.evaluate_input(inputs_next)
@@ -92,30 +85,8 @@ class Trainer:
         return tf.transpose(tf.map_fn(lambda i: tf.image.decode_jpeg(
             i), inputs, dtype=tf.uint8)[:, :, :, 0], [1, 2, 0])
 
-    def train_step(self, batch):
-        if self.debugger:
-            sess = debug.TensorBoardDebugWrapperSession(
-                K.get_session(), 'localhost:6004')
-            K.set_session(sess)
-            self.debugger = False
-
-        sess = K.get_session()
-
-        return sess.run(self.tf_train_step, feed_dict=self.build_feed_dict(
-            batch), options=self.options, run_metadata=self.run_metadata)
-
     def evaluate_input(self, input):
         return tf.reshape(self.neural_net.model(input), [32, 8, 3])
-
-    def build_feed_dict(self, batch):
-        return {
-            'rewards:0': [[s['score'], ] * 8 for s in batch],
-            'actions:0': [s['action'] for s in batch],
-            # 'observations:0': [s['observations'] for s in batch],
-            'terminal:0': [s['terminal'] for s in batch],
-            'inputs:0': [s['images'] for s in batch],
-            'inputs_next:0': [s['images_next'] for s in batch]
-        }
 
     def evaluate_input_old(self, input):
         return tf.reshape(self.neural_net_old.model(input), [32, 8, 3])
