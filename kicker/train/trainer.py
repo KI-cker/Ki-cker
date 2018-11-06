@@ -41,6 +41,7 @@ class Trainer:
 
         return observations_img
 
+    @autograph.convert()
     def compute(self, actions, inputs, inputs_next, rewards, terminals):
         computed = self.evaluate_input(inputs)
         computed_next = self.evaluate_input(inputs_next)
@@ -82,8 +83,6 @@ class Trainer:
 
         return train_step, loss, tf.abs(
             q_new - q_old), tf.argmax(computed, axis=2), merged
-
-    graph_compute = autograph.to_graph(compute)
 
     def convert_images(self, inputs):
         return tf.transpose(tf.map_fn(lambda i: tf.image.decode_jpeg(
