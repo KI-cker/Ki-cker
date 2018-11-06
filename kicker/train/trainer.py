@@ -1,4 +1,5 @@
 import tensorflow as tf
+from tensorflow.contrib import autograph
 
 from keras import backend as K
 
@@ -47,21 +48,22 @@ class Trainer:
         # computed_actions = tf.stop_gradient(tf.argmax(computed, axis=2))
         actions_one_hot = tf.one_hot(actions, 3, axis=2)
         q_old = tf.reduce_sum(actions_one_hot * computed, axis=2)
-        argmax_old = tf.one_hot(
-            tf.argmax(
-                computed_next_old,
-                axis=2),
-            3,
-            axis=2)
+        argmax_old = tf.one_hot(tf.argmax(computed_next_old, axis=2), 3, axis=2)
+
         second_term = self.gamma * \
             tf.reduce_sum(computed_next * argmax_old, axis=2)
         # second_term = self.gamma * tf.reduce_max(computed_next, axis=2)
-        q_new = tf.stop_gradient(
-            rewards +
-            tf.where(
-                terminals,
-                tf.zeros_like(second_term),
-                second_term))
+
+        if terminals:
+            extraRewards = tf.zeros_like(second_term)
+        else:
+            extraRewards = second_term
+
+        print("autograph result", extraRewards)
+
+        print("native graph result", tf.where(terminals, tf.zeros_like(second_term), second_term))
+
+        q_new = tf.stop_gradient(rewards + extraRewards)
 
         loss = tf.losses.huber_loss(q_new, q_old, delta=50.0)
         # loss = loss + 0.01 * tf.reduce_mean(tf.where(computed_actions == tf.ones_like(computed_actions), tf.zeros_like(q_new), tf.ones_like(q_new)))
@@ -80,6 +82,8 @@ class Trainer:
 
         return train_step, loss, tf.abs(
             q_new - q_old), tf.argmax(computed, axis=2), merged
+
+    graph_compute = autograph.to_graph(compute)
 
     def convert_images(self, inputs):
         return tf.transpose(tf.map_fn(lambda i: tf.image.decode_jpeg(
