@@ -51,7 +51,7 @@ step, loss, diff, computed, merged = t.compute(a, i, i_n, s, ter)
 sess = K.get_session()
 sess.run(tf.global_variables_initializer())
 
-for j in range(5000):
+for j in range(1000):
 
     _, c_loss, c_diff, c_computed, c_merged = sess.run([step, loss, diff, computed, merged])
     t.writer.add_run_metadata(t.run_metadata, "step%d" % j, j)
