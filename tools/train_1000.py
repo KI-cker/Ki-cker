@@ -33,9 +33,9 @@ learning_rate = 1e-4
 gamma = 0.99
 
 if args.learning_rate:
-    learning_rate = float(args.learning_rate)
+    learning_rate = float(args.learning_rate.replace(',','.'))
 if args.gamma:
-    gamma = float(args.gamma)
+    gamma = float(args.gamma.replace(',','.'))
 
 t = Trainer(nn,gamma=gamma,learning_rate=learning_rate)
 
