@@ -43,7 +43,8 @@ class NeuralNet():
             self.model = build_net(input_shape, num_output)
 
     def save(self):
-        self.model.save(self.filename)
+        # self.model.save(self.filename)
+        self.model.save('model_new.h5')
 
     def predict(self, frames):
         prediction = self.model.predict(frames)

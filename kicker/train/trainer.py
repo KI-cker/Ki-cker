@@ -41,11 +41,10 @@ class Trainer:
 
         return observations_img
 
-    @autograph.convert()
     def compute(self, actions, inputs, inputs_next, rewards, terminals):
         computed = self.evaluate_input(inputs)
         computed_next = self.evaluate_input(inputs_next)
-        computed_next_old = self.evaluate_input_old(inputs_next)
+        computed_next_old = self.evaluate_input_old(inputs_next) # double Q learning
         # computed_actions = tf.stop_gradient(tf.argmax(computed, axis=2))
         actions_one_hot = tf.one_hot(actions, 3, axis=2)
         q_old = tf.reduce_sum(actions_one_hot * computed, axis=2)
@@ -55,15 +54,7 @@ class Trainer:
             tf.reduce_sum(computed_next * argmax_old, axis=2)
         # second_term = self.gamma * tf.reduce_max(computed_next, axis=2)
 
-        if terminals:
-            extraRewards = tf.zeros_like(second_term)
-        else:
-            extraRewards = second_term
-
-        print("autograph result", extraRewards)
-
-        print("native graph result", tf.where(terminals, tf.zeros_like(second_term), second_term))
-
+        extraRewards = tf.where(terminals, tf.zeros_like(second_term), second_term)
         q_new = tf.stop_gradient(rewards + extraRewards)
 
         loss = tf.losses.huber_loss(q_new, q_old, delta=50.0)
