@@ -2,6 +2,8 @@
 
 rm -r images
 mkdir images
+rm -r model
+mkdir model
 
 for a in $(seq 0.00005 0.0001 0.00085)
 do
