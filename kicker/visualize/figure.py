@@ -11,6 +11,8 @@ class Figure():
         self.titles = ['Goal Radial', 'Goal Lateral', 'Defense Radial', 'Defense Lateral', 'Center Radial', 'Center Lateral',
                        'Attack Radial', 'Attack Lateral']
 
+        self.positions = ['Goal', 'Defense', 'Center', 'Attack']
+
         self.degrees_of_freedom = len(self.titles)
 
         if visualize_q_value:
@@ -43,6 +45,8 @@ class Figure():
 
     def plot(self, before, now, after, prediction):
         self.figure.clf()
+        radial_lines = []
+        lateral_lines = []
 
         if self.show_images and not(self.visualize_q_value):
             axes = [pyplot.Subplot(self.figure, self.inner[j]) for j in range(3)]
@@ -66,10 +70,17 @@ class Figure():
 
         for j in range(int(self.degrees_of_freedom / 2)):
             axes_history = pyplot.Subplot(self.figure, self.history_plots[j])
+            axes_history.set_title(self.positions[j])
             l = len(self.history[0][-100:])
-            axes_history.plot(
-                range(l), self.history[2 * j][-100:], range(l), self.history[2 * j + 1][-100:])
+
+            radial_lines.append(axes_history.plot(range(l), self.history[2 * j][-100:]))
+            lateral_lines.append(axes_history.plot(range(l), self.history[2 * j + 1][-100:]))
             self.figure.add_subplot(axes_history)
+
+        if self.visualize_q_value:
+            pyplot.figlegend(radial_lines[0], 'Radial', 'upper right')
+            pyplot.figlegend(lateral_lines[0], 'Lateral', 'lower right')
+            self.figure.legend()
 
         if not(self.visualize_q_value):
             self.figure.show()
