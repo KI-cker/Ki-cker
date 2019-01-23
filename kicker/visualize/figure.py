@@ -73,14 +73,11 @@ class Figure():
             axes_history.set_title(self.positions[j])
             l = len(self.history[0][-100:])
 
-            radial_lines.append(axes_history.plot(range(l), self.history[2 * j][-100:]))
-            lateral_lines.append(axes_history.plot(range(l), self.history[2 * j + 1][-100:]))
+            radial_plot, lateral_plot = axes_history.plot(range(l), self.history[2 * j][-100:], range(l), self.history[2 * j + 1][-100:])
             self.figure.add_subplot(axes_history)
 
         if self.visualize_q_value:
-            pyplot.figlegend(radial_lines[0], 'Radial', 'upper right')
-            pyplot.figlegend(lateral_lines[0], 'Lateral', 'lower right')
-            self.figure.legend()
+            pyplot.figlegend( (radial_plot, lateral_plot), ('Radial','Lateral'), 'upper right')
 
         if not(self.visualize_q_value):
             self.figure.show()
