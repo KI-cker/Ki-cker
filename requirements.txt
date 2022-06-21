@@ -73,7 +73,7 @@ nbformat==4.4.0
 networkx==2.1
 nltk==3.2.5
 notebook==5.2.2
-numpy==1.14.5
+numpy==1.22.0
 olefile==0.44
 opcua==0.90.4
 opencv-python==3.4.0.12
