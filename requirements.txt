@@ -68,7 +68,7 @@ Mastodon.py==1.2.2
 matplotlib==2.1.0
 mistune==0.8.1
 mmdnn==0.1.4
-nbconvert==5.3.1
+nbconvert==6.3.0
 nbformat==4.4.0
 networkx==2.1
 nltk==3.2.5
